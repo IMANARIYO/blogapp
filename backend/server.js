@@ -14,7 +14,7 @@ import { seedDatabase } from "./src/controllers/seederController.js";
 dotenv.config()
 
 const app = express()
-const port = process.env.server_PORT || 3000
+const port = process.env.server_PORT || 4444
 
 // Middleware to parse JSON
 app.use(express.json())
