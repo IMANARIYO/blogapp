@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
-import { AppError, catchAsync } from "../middlewares/globaleerorshandling.js";
-import { User } from "../models/user.js";
+import { models } from "../models/index.js";
 
+const{Comment, Post, User} = models;
 dotenv.config();
 
 cloudinary.config({
@@ -13,7 +13,19 @@ cloudinary.config({
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: Post,
+          as: 'posts',
+          include: [{ model: Comment, as: 'comments' }]
+        },
+        {
+          model: Comment,
+          as: 'comments'
+        }
+      ]
+    });
 
     if (users.length === 0) {
       return res.status(404).json({ success: false, error: 'No users found' });
@@ -23,6 +35,38 @@ export const getAllUsers = async (req, res) => {
       success: true,
       message: 'Users retrieved successfully',
       data: users
+    });
+  } catch (error) {
+    console.log("the error is ",error.message)
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id, {
+      include: [
+        {
+          model: Post,
+          as: 'posts',
+          include: [{ model: Comment, as: 'comments' }]
+        },
+        {
+          model: Comment,
+          as: 'comments'
+        }
+      ]
+    });
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'User retrieved successfully',
+      data: user
     });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -73,22 +117,21 @@ export const updateUserById = async (req, res) => {
   }
 };
 
-
 export const addAdmin = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await User.findByPk(id);
-    if (!result) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    result.role = 'admin';
-    await result.save();
+    user.role = 'admin';
+    await user.save();
 
     res.status(200).json({
       success: true,
       message: 'User updated successfully and is now an admin',
-      data: result
+      data: user
     });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -98,22 +141,20 @@ export const addAdmin = async (req, res) => {
 export const removeAdmin = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await User.findByPk(id);
-    if (!result) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    result.role = 'user';
-    await result.save();
+    user.role = 'user';
+    await user.save();
 
     res.status(200).json({
       success: true,
       message: 'User updated successfully and is now a regular user',
-      data: result
+      data: user
     });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
-
-

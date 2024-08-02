@@ -25,7 +25,7 @@ export const seedPosts = async () => {
       },
     ]);
     
-    console.log('Posts seeded successfully!');
+    // console.log('Posts seeded successfully!');
   } catch (error) {
     console.error('Error seeding posts:', error);
   }

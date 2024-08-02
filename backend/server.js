@@ -9,6 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import yaml from "yamljs";
 import { sequelize } from "./config/config.js";
 import { syncDB } from "./config/syncDB .js";
+import { seedUsers } from "./seeders/20240801154108-demo-users.js";
 import { seedDatabase } from "./src/controllers/seederController.js";
 import { badroutes, errosingeneral } from "./src/middlewares/globaleerorshandling.js";
 

@@ -1,4 +1,5 @@
 import { models } from "../src/models/index.js";
+import { passHashing } from "../src/utils/passwordfunctions.js";
 
 const { User } = models;
 
@@ -8,9 +9,9 @@ export const seedUsers = async () => {
     // Hash the passwords for each user
     const adminHashedPassword = await passHashing('admin123');
     const userHashedPassword = await passHashing('user123');
-    
+
     // Bulk create users with unique passwords
-    await User.bulkCreate([
+    const createdUsers = await User.bulkCreate([
       {
         username: 'admin',
         email: 'admin@example.com',
@@ -28,12 +29,20 @@ export const seedUsers = async () => {
         password: userHashedPassword,
         profilePicture: 'https://st3.depositphotos.com/15648834/17930/v/450/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
         role: 'user',
-         gender: 'male',
+        gender: 'male',
         phoneNumber: '0787795163'
       },
     ]);
-    
+
     console.log('Users seeded successfully!');
+    
+    // Fetch and log the inserted users to verify
+    // const insertedUsers = await User.findAll({
+    //   where: {
+    //     username: ['admin', 'user']
+    //   }
+    // });
+    // console.log('Inserted Users:', insertedUsers);
   } catch (error) {
     console.error('Error seeding users:', error);
   }

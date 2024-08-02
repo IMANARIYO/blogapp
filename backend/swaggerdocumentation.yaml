@@ -12,7 +12,7 @@ info:
     url: "https://imanariyo-portfolio-web.vercel.app/"
 
 servers:
-  - url: http://localhost:3330
+  - url: http://localhost:4444
     description: Local server
   - url: https://blogapp-ampm.onrender.com/
     description: development server server
@@ -509,6 +509,31 @@ paths:
         '400':
           description: Invalid request data
 
+  /posts/user/{userId}:
+    get:
+      tags:
+        - Posts
+      summary: Get Posts by User ID
+      description: Retrieves a list of posts created by a specific user.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: The ID of the user whose posts to retrieve
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: Posts not found for the specified user
 
   /posts/{id}:
     get:

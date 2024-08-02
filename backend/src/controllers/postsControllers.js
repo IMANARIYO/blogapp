@@ -27,11 +27,11 @@ export const getPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
       include: [
-        { model: User, as: 'author', attributes: ['fullNames', 'email'] },
+        { model: User, as: 'author'},
         {
           model: Comment,
           as: 'comments',
-          include: [{ model: User, as: 'author', attributes: ['fullNames', 'email'] }]
+          include: [{ model: User, as: 'user' }]
         }
       ]
     });
@@ -43,14 +43,15 @@ export const getPosts = async (req, res) => {
 
 export const getUserPosts = async (req, res) => {
   try {
+    let userId=req.params.userId;
     const posts = await Post.findAll({
-      where: { authorId: req.user.id },
+      where: { authorId: userId },
       include: [
-        { model: User, as: 'author', attributes: ['fullNames', 'email'] },
+        { model: User, as: 'author'},
         {
           model: Comment,
           as: 'comments',
-          include: [{ model: User, as: 'author', attributes: ['fullNames', 'email'] }]
+          include: [{ model: User, as: 'user' }]
         }
       ]
     });
@@ -68,7 +69,7 @@ export const getPost = async (req, res) => {
         {
           model: Comment,
           as: 'comments',
-          include: [{ model: User, as: 'author', attributes: ['fullNames', 'email'] }]
+          include: [{ model: User, as: 'user' }]
         }
       ]
     });

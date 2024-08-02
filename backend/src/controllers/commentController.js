@@ -11,7 +11,7 @@ export const addComment = async (req, res) => {
 
     const comment = await Comment.create({
       content: req.body.content,
-      authorId: req.user.id,
+      userId: req.user.id,
       postId: req.params.postId
     });
 
@@ -25,7 +25,7 @@ export const getComments = async (req, res) => {
   try {
     const comments = await Comment.findAll({
       where: { postId: req.params.postId },
-      include: [{ model: User, as: 'author', }] // Assuming you have a User model with name and email fields
+      include: [{ model: User, as: 'user', }] // Assuming you have a User model with name and email fields
     });
     res.status(200).json(comments);
   } catch (error) {
@@ -36,7 +36,7 @@ export const getComments = async (req, res) => {
 export const getCommentById = async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id, {
-      include: [{ model: User, attributes: ['fullNames', 'email'] }]
+      include: [{ model: User,  as: 'user',}]
     });
 
     if (!comment) {
@@ -57,7 +57,7 @@ export const updateComment = async (req, res) => {
       return res.status(404).json({ message: 'Comment not found' });
     }
 
-    if (comment.authorId !== req.user.id) { // Assuming req.user.id contains the authenticated user's ID
+    if (comment.UserId !== req.user.id) { // Assuming req.user.id contains the authenticated user's ID
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
