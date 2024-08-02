@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --exec babel-node server.js"
+    "start": "babel-node server.js",
+    "build": "babel server.js -d dist",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "imanariyo baptiste",
@@ -37,7 +39,10 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.8",
     "@babel/core": "^7.23.3",
+    "@babel/node": "^7.25.0",
+    "@babel/preset-env": "^7.25.3",
     "nodemon": "^3.1.4",
     "sequelize-cli": "^6.6.2",
     "yamljs": "^0.3.0"
