@@ -14,10 +14,12 @@ export const seedPosts = async () => {
         image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Posts_on_the_saltmarsh%2C_Warton_Sands_-_geograph.org.uk_-_1658558.jpg',
         createdAt: new Date(),
         updatedAt: new Date(),
+        category: 'category1.',
       },
       {
         title: 'Second Post',
         content: 'Content of the second post.',
+        category: 'category.',
         authorId: 2, // Assuming the second user created in the users seeder has id 2
         image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Posts_on_the_saltmarsh%2C_Warton_Sands_-_geograph.org.uk_-_1658558.jpg',
         createdAt: new Date(),
