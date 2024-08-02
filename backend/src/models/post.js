@@ -25,7 +25,11 @@ export const Post = sequelize.define('Post', {
   image: {
     type: DataTypes.STRING,
     allowNull: true
-  }
+  },
+   category: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
 }, {
   timestamps: true,
   tableName: 'Posts'
