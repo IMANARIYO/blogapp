@@ -84,6 +84,9 @@ components:
         content:
           type: string
           example: This is the content of the first post.
+        category:
+          type: string
+          example: category.
         authorId:
           type: integer
           example: 1
