@@ -1,6 +1,7 @@
 import CommentRouter from "./src/routes/commentsRoutes.js";
 import authRouter from "./src/routes/AuthenticaticationRoutes.js";
 import bodyParser from "body-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import postsRouter from "./src/routes/postsRoutes.js";
@@ -13,8 +14,8 @@ import { badroutes, errosingeneral } from "./src/middlewares/globaleerorshandlin
 
 // Load environment variables
 dotenv.config()
-
-const app = express()
+const app = express();
+app.use(cors());  
 const port = process.env.server_PORT || 4444
 
 // Middleware to parse JSON
@@ -35,7 +36,7 @@ app.use(errosingeneral)
 app.use((req, res) => {
   res.status(404).json({ message: "Welcome to the API! This route is not found." });
 });
-
+app.use(bodyParser.json())
 // Connect to PostgreSQL and sync database
 sequelize
   .authenticate()

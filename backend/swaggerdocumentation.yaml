@@ -10,9 +10,13 @@ info:
     telphone: "+250787795163"
 
     url: "https://imanariyo-portfolio-web.vercel.app/"
+
 servers:
   - url: http://localhost:3330
     description: Local server
+  - url: https://blogapp-ampm.onrender.com/
+    description: development server server
+
 
 tags:
   - name: Seed
