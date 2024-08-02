@@ -9,6 +9,7 @@ import yaml from "yamljs";
 import { sequelize } from "./config/config.js";
 import { syncDB } from "./config/syncDB .js";
 import { seedDatabase } from "./src/controllers/seederController.js";
+import { badroutes, errosingeneral } from "./src/middlewares/globaleerorshandling.js";
 
 // Load environment variables
 dotenv.config()
@@ -22,38 +23,19 @@ app.use(express.json())
 // Swagger UI setup
 const swaggerDocument = yaml.load('./swaggerdocumentation.yaml')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-// Set up routes
+
 app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
 app.use('/comments', CommentRouter)
 app.use('/seed', seedDatabase)
 
-app.use((err, req, res, next) => {
-  console.error('Server Error:', err.message)
-  res.status(500).json({ error: 'Internal Server Error' })
-})
-// Route to sync the database
-app.post('/sync-db', async (req, res) => {
-  try {
-    const result = await syncDB()
+app.post('/sync-db', syncDB);  // Use syncDB middleware directly
+app.use('*',badroutes)
+app.use(errosingeneral)
+app.use((req, res) => {
+  res.status(404).json({ message: "Welcome to the API! This route is not found." });
+});
 
-    if (result.success) {
-      res.status(200).json({
-        message: result.message,
-        tables: result.tables
-      })
-    } else {
-      res.status(500).json({
-        message: result.message,
-        error: result.error
-      })
-    }
-  } catch (error) {
-    console.error('Failed to sync database:', error)
-    res.status(500).send('Failed to sync database')
-  }
-})
-app.use(bodyParser.json())
 // Connect to PostgreSQL and sync database
 sequelize
   .authenticate()
