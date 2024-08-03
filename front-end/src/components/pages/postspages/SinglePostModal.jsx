@@ -19,7 +19,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       // Fetch comments for the post from the post object
       setComments(post.comments || []);
     }
-  }, [post, show]);
+  }, [post]);
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
@@ -32,9 +32,9 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       // Here you would call your API to post the comment
       const newCommentData = {
         id: Date.now(), // Unique id for the new comment
-        author: {
-          name: 'Current User', // Replace with actual user data
-          profileImage: 'https://via.placeholder.com/50', // Replace with actual user data
+        user: {
+          fullNames: 'Current User', // Replace with actual user data
+          profilePicture: 'https://via.placeholder.com/50', // Replace with actual user data
         },
         content: newComment,
         createdAt: new Date().toISOString(),
@@ -46,7 +46,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
     }
   };
 
-  const imageUrl = post?.image ? `${BASE_URL}${post.image}` : null;
+  const imageUrl = post?.image ? post.image : null;
 
   return (
     <Modal
