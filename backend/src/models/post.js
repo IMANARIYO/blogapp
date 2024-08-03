@@ -8,10 +8,14 @@ export const Post = sequelize.define('Post', {
     primaryKey: true
   },
   title: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   content: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  category: {
     type: DataTypes.TEXT,
     allowNull: false
   },

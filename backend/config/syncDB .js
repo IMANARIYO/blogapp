@@ -14,11 +14,11 @@ export const syncDB = async (req, res) => {
     // Retrieve table names
     const tables = await sequelize.getQueryInterface().showAllTables()
     // Retrieve column information for each table
-    // const tableDetails = {}
-    // for (const table of tables) {
-    //   const columns = await sequelize.getQueryInterface().describeTable(table)
-    //   tableDetails[table] = columns
-    // }
+    const tableDetails = {}
+    for (const table of tables) {
+      const columns = await sequelize.getQueryInterface().describeTable(table)
+      tableDetails[table] = columns
+    }
     res.status(200).json({
       success: true,
       message: 'Database synced!',

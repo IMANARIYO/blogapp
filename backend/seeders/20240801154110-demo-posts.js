@@ -10,6 +10,7 @@ export const seedPosts = async () => {
       {
         title: 'First Post',
         content: 'This is the content of the first post.',
+        category: 'category1',
         authorId: 1, // Assuming the first user created in the users seeder has id 1
         image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Posts_on_the_saltmarsh%2C_Warton_Sands_-_geograph.org.uk_-_1658558.jpg',
         createdAt: new Date(),
@@ -18,6 +19,7 @@ export const seedPosts = async () => {
       {
         title: 'Second Post',
         content: 'Content of the second post.',
+        category: 'category2',
         authorId: 2, // Assuming the second user created in the users seeder has id 2
         image: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Posts_on_the_saltmarsh%2C_Warton_Sands_-_geograph.org.uk_-_1658558.jpg',
         createdAt: new Date(),
