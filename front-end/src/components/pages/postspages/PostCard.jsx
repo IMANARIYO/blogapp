@@ -2,24 +2,26 @@ import React from "react";
 
 const PostCard = ({ post, onOpenModal }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer max-w-sm mx-auto my-4">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-2">
       {/* Image Section */}
       <img
         src={post.image || 'https://via.placeholder.com/300'}
         alt={post.title}
-        className="w-full h-48 object-cover"
+        className="h-56 w-full object-cover rounded-md"
       />
 
       {/* Content Section */}
-      <div className="p-4">
+      <div className="flex flex-col gap-2">
         {/* Title */}
-        <h2 className="text-xl font-semibold text-gray-900 mb-2 truncate">{post.title}</h2>
+        <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
 
         {/* Content Preview */}
-        <p className="text-gray-600 mb-4 text-sm">{post.content.slice(0, 150)}...</p>
+        <p className="text-gray-600 text-sm">{post.content.slice(0, 150)}...</p>
+      </div>
 
-        {/* Author and Time */}
-        <div className="flex items-start mb-4">
+      {/* Author and Time Section */}
+      <div className="flex items-center justify-between p-2 border-t border-gray-200">
+        <div className="flex items-center">
           <img
             src={post.authorImage || 'https://via.placeholder.com/50'}
             alt={post.authorName}
@@ -30,21 +32,21 @@ const PostCard = ({ post, onOpenModal }) => {
             <span className="text-gray-500 text-xs">{post.timePassed}</span>
           </div>
         </div>
+        
+        <span className="bg-blue-100 text-blue-800 text-xs font-semibold rounded-md p-2">
+          {post.category || 'Category'}
+        </span>
+      </div>
 
-        {/* Comments Count and Category */}
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-gray-500 text-xs">
-            {post.commentCount} {post.commentCount === 1 ? 'Comment' : 'Comments'}
-          </div>
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold py-1 px-2 rounded-full">
-            {post.category || 'Category'}
-          </span>
+      {/* Comments Count and View Post Button */}
+      <div className="flex justify-between items-center border-t border-gray-100 p-2 ">
+        <div className=" text-xs bg-gray-200 px-3 py-1 rounded-md">
+          {post.commentCount} {post.commentCount === 1 ? 'Comment' : 'Comments'}
         </div>
-
-        {/* View Post Button */}
+        
         <button
           onClick={onOpenModal}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-blue-600 text-white py-1 px-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           View Post
         </button>

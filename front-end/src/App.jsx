@@ -29,7 +29,7 @@ export function App() {
 
   return (
 
-      <div className="overflow-hidden">
+      <div >
         <Navbar user={user} onLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<ViewPostsPage />} />

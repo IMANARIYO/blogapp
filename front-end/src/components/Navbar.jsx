@@ -6,7 +6,7 @@ const Navbar = ({ user, onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
-    <nav className="bg-gray-200 p-4 flex items-center justify-between rounded-md shadow-md">
+    <nav className="bg-gray-200 p-4 flex items-center justify-between rounded-md shadow-md fixed left-0 right-0">
       {/* Logo */}
       <div className="flex items-center space-x-4">
         <Link to="/" className="flex items-center">
