@@ -1,26 +1,41 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostCard from "./PostCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SinglePostModal from "./SinglePostModal";
-
-// Dummy posts data
-const posts = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  title: `Post Title ${index + 1}`,
-  content: `This is a short description of post number ${index + 1}. The content will be truncated to show only the first few hundred characters.`,
-  authorName: `Author ${index + 1}`,
-  authorImage: "https://via.placeholder.com/50",
-  image: "https://images.pexels.com/photos/1547813/pexels-photo-1547813.jpeg?auto=compress&cs=tinysrgb&w=400",
-  timePassed: `${Math.floor(Math.random() * 7) + 1} days ago`,
-  commentCount: Math.floor(Math.random() * 20) + 1
-}));
+import api from "../../../services/api";
 
 const POSTS_PER_PAGE = 10; // Number of posts to load per scroll
 
 const ViewPostsPage = () => {
+  const [posts, setPosts] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [visiblePosts, setVisiblePosts] = useState(POSTS_PER_PAGE);
+  const [hasMore, setHasMore] = useState(true); // To check if there are more posts to load
+  const [loading, setLoading] = useState(false); // For loading state
+
+  // Fetch posts from API
+  const fetchPosts = async (start = 0, limit = POSTS_PER_PAGE) => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/posts?start=${start}&limit=${limit}`);
+      const fetchedPosts = response.data;
+      
+      if (fetchedPosts.length < limit) {
+        setHasMore(false); // No more posts to load
+      }
+
+      setPosts(prev => [...prev, ...fetchedPosts]);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts(0, POSTS_PER_PAGE); // Initial fetch
+  }, []);
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
@@ -33,22 +48,24 @@ const ViewPostsPage = () => {
   };
 
   const loadMorePosts = () => {
-    setVisiblePosts(prev => Math.min(prev + POSTS_PER_PAGE, posts.length));
+    if (hasMore) {
+      fetchPosts(posts.length, POSTS_PER_PAGE); // Fetch more posts
+    }
   };
 
   return (
-    <div className=" p-4">
+    <div className="p-4">
       <h1 className="text-4xl font-bold mb-6 text-gray-800">Posts</h1>
-      <div className="">
+      <div className="flex flex-col items-center">
         <InfiniteScroll
-          dataLength={visiblePosts}
+          dataLength={posts.length}
           next={loadMorePosts}
-          hasMore={visiblePosts < posts.length}
-          loader={<h4 className="text-center">Loading more posts...</h4>}
+          hasMore={hasMore}
+          loader={loading ? <h4 className="text-center">Loading more posts...</h4> : null}
           endMessage={<p className="text-center text-gray-500">No more posts to show.</p>}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {posts.slice(0, visiblePosts).map(post => (
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {posts.map(post => (
               <PostCard
                 key={post.id}
                 post={post}

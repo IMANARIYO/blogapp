@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Your API base URL
+  baseURL: 'http://localhost:4444', // Your API base URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -30,9 +30,9 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+export const serverurl= 'http://localhost:4444'
 export const apiMultipart = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: serverurl,
   headers: {
     'Content-Type': 'multipart/form-data',
   },
