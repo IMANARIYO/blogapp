@@ -16,7 +16,7 @@ export const seedUsers = async () => {
         username: 'admin',
         email: 'admin@example.com',
         password: adminHashedPassword,
-        profilePicture: 'https://st3.depositphotos.com/15648834/17930/v/450/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
+        profilePicture: '/media/1722719109044-profile-1.jpeg',
         role: 'admin',
         fullNames: "Imanariyobaptiste",
         gender: 'male',
@@ -27,7 +27,7 @@ export const seedUsers = async () => {
         email: 'user@example.com',
         fullNames: "userfull names",
         password: userHashedPassword,
-        profilePicture: 'https://st3.depositphotos.com/15648834/17930/v/450/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
+        profilePicture: '/media/1722719109044-profile-1.jpeg',
         role: 'user',
         gender: 'male',
         phoneNumber: '0787795163'

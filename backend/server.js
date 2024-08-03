@@ -4,15 +4,19 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import path from "path";
 import postsRouter from "./src/routes/postsRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import yaml from "yamljs";
+import { fileURLToPath } from "url";
 import { sequelize } from "./config/config.js";
 import { syncDB } from "./config/syncDB .js";
+import { baptistename } from "./media/index.js";
 import { seedUsers } from "./seeders/20240801154108-demo-users.js";
 import { seedDatabase } from "./src/controllers/seederController.js";
 import { badroutes, errosingeneral } from "./src/middlewares/globaleerorshandling.js";
 
+baptistename
 // Load environment variables
 dotenv.config()
 const app = express();
@@ -25,7 +29,11 @@ app.use(express.json())
 // Swagger UI setup
 const swaggerDocument = yaml.load('./swaggerdocumentation.yaml')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-
+// Serve static files from the media directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/media', express.static(path.join(__dirname, './media')));
+//routes
 app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
 app.use('/comments', CommentRouter)

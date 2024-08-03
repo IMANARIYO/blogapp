@@ -65,7 +65,7 @@ export const getPost = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id, {
       include: [
-        { model: User, as: 'author', attributes: ['fullNames', 'email'] },
+        { model: User, as: 'author' },
         {
           model: Comment,
           as: 'comments',

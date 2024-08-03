@@ -498,6 +498,9 @@ paths:
                 content:
                   type: string
                   example: This is the content of the first post.
+                category:
+                  type: string
+                  example: binance.
                 authorId:
                   type: integer
                   example: 1

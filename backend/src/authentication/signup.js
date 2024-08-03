@@ -14,22 +14,22 @@ const { Comment, Post, User } = models;
 
 
 // Schedule user deletion
-const scheduleUserDeletion = (userId, signupTime) => {
-  const deletionTime = new Date(signupTime.getTime() + 3 * 60 * 1000); // 3 minutes later
-  const cronExpression = `${deletionTime.getMinutes()} ${deletionTime.getHours()} * * *`;
+// const scheduleUserDeletion = (userId, signupTime) => {
+//   const deletionTime = new Date(signupTime.getTime() + 3 * 60 * 1000); // 3 minutes later
+//   const cronExpression = `${deletionTime.getMinutes()} ${deletionTime.getHours()} * * *`;
 
-  cron.schedule(cronExpression, async () => {
-    try {
-      const user = await models.User.findOne({ where: { id: userId } });
-      if (user && !user.verified) {
-        await models.User.destroy({ where: { id: userId } });
-        console.log(`Deleted unverified user with ID: ${userId}`);
-      }
-    } catch (error) {
-      console.error('Error deleting unverified user:', error.message);
-    }
-  });
-};
+//   cron.schedule(cronExpression, async () => {
+//     try {
+//       const user = await models.User.findOne({ where: { id: userId } });
+//       if (user && !user.verified) {
+//         await models.User.destroy({ where: { id: userId } });
+//         console.log(`Deleted unverified user with ID: ${userId}`);
+//       }
+//     } catch (error) {
+//       console.error('Error deleting unverified user:', error.message);
+//     }
+//   });
+// };
 
 // Signup route
 export const signup = catchAsync(async (req, res, next) => {
@@ -69,7 +69,7 @@ export const signup = catchAsync(async (req, res, next) => {
     }
   });
 
-  scheduleUserDeletion(newUser.id, newUser.createdAt);
+  // scheduleUserDeletion(newUser.id, newUser.createdAt);
 });
 
 

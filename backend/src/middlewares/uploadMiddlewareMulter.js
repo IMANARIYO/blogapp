@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure uploads directory exists
-const uploadDir = path.join(__dirname, '../media');
+const uploadDir = path.join(__dirname, '../../media'); // Adjust path to reach the media folder
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
   console.log('Created uploads directory at:', uploadDir);
