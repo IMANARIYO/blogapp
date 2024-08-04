@@ -3,39 +3,58 @@ import PostCard from "./PostCard";
 import React, { useEffect, useState } from "react";
 import SinglePostModal from "./SinglePostModal";
 import api from "../../../services/api";
+import { useLocation } from "react-router-dom";
 
-const POSTS_PER_PAGE = 10; // Number of posts to load per scroll
+const POSTS_PER_PAGE = 10;
 
 const ViewPostsPage = () => {
   const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [visiblePosts, setVisiblePosts] = useState(POSTS_PER_PAGE);
-  const [hasMore, setHasMore] = useState(true); // To check if there are more posts to load
-  const [loading, setLoading] = useState(false); // For loading state
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
-  // Fetch posts from API
-  const fetchPosts = async (start = 0, limit = POSTS_PER_PAGE) => {
+  const query = new URLSearchParams(location.search);
+  const authorId = query.get('authorId');
+
+  const fetchAllPosts = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/posts?start=${start}&limit=${limit}`);
+      const response = await api.get(`/posts?start=0&limit=${POSTS_PER_PAGE}`);
       const fetchedPosts = response.data;
-      
-      if (fetchedPosts.length < limit) {
-        setHasMore(false); // No more posts to load
-      }
 
-      setPosts(prev => [...prev, ...fetchedPosts]);
-      setLoading(false);
+      setAllPosts(fetchedPosts);
+      setPosts(fetchedPosts);
+      setHasMore(fetchedPosts.length === POSTS_PER_PAGE);
     } catch (error) {
       console.error('Error fetching posts:', error);
+    } finally {
       setLoading(false);
     }
   };
 
+  const filterPostsByAuthor = () => {
+    if (authorId) {
+      const filteredPosts = allPosts.filter(post => {
+  
+        return post.authorId == authorId;
+      });
+     
+      setPosts(filteredPosts);
+    } else {
+      setPosts(allPosts);
+    }
+  };
+
   useEffect(() => {
-    fetchPosts(0, POSTS_PER_PAGE); // Initial fetch
+    fetchAllPosts();
   }, []);
+
+  useEffect(() => {
+    filterPostsByAuthor();
+  }, [authorId, allPosts]);
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
@@ -45,18 +64,19 @@ const ViewPostsPage = () => {
   const handleCloseModal = () => {
     setModalShow(false);
     setSelectedPost(null);
-    window.location.reload();
   };
 
   const loadMorePosts = () => {
     if (hasMore) {
-      fetchPosts(posts.length, POSTS_PER_PAGE); // Fetch more posts
+      fetchAllPosts();
     }
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-4xl font-bold mb-6 text-gray-800">Posts</h1>
+      <h1 className="text-4xl font-bold mb-6 text-gray-800">
+        {authorId ? 'Author\'s Posts' : 'All Posts'}
+      </h1>
       <div className="flex flex-col items-center">
         <InfiniteScroll
           dataLength={posts.length}
@@ -77,7 +97,6 @@ const ViewPostsPage = () => {
         </InfiniteScroll>
       </div>
 
-      {/* SinglePostModal component */}
       {selectedPost && (
         <SinglePostModal
           show={modalShow}

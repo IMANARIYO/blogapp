@@ -10,17 +10,11 @@ const AuthorsPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await getAllUsers();
-        const users = data.data; // Adjust based on the actual structure of your API response
+        const response = await getAllUsers();
+        const users = response.data; // Adjust based on your API response structure
 
-        // Transforming the user data to fit the AuthorCard props
-        const transformedAuthors = users.map(user => ({
-          name: user.fullNames,
-          posts: user.posts.length,
-          profileImage: `http://localhost:4444${user.profilePicture}` // Adjust the URL if needed
-        }));
-        
-        setAuthors(transformedAuthors);
+        // Setting authors with complete user data
+        setAuthors(users);
       } catch (error) {
         setError('Failed to fetch users');
         console.error('Error fetching users:', error);
@@ -44,8 +38,8 @@ const AuthorsPage = () => {
     <div className='p-4'>
       <h1 className='text-3xl font-bold mb-4'>Authors</h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-        {authors.map((author, index) => (
-          <AuthorCard key={index} author={author} />
+        {authors.map((author) => (
+          <AuthorCard key={author.id} user={author} />
         ))}
       </div>
     </div>

@@ -46,6 +46,7 @@ useEffect(() => {
         <Navbar user={user} onLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<ViewPostsPage />} />
+          <Route path="/posts" element={<ViewPostsPage />} /> 
           <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgetPasswordPage />} />
