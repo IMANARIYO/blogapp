@@ -45,6 +45,7 @@ const ViewPostsPage = () => {
   const handleCloseModal = () => {
     setModalShow(false);
     setSelectedPost(null);
+    window.location.reload();
   };
 
   const loadMorePosts = () => {
@@ -64,7 +65,7 @@ const ViewPostsPage = () => {
           loader={loading ? <h4 className="text-center">Loading more posts...</h4> : null}
           endMessage={<p className="text-center text-gray-500">No more posts to show.</p>}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 mdl:grid-cols-3 lg:grid-cols-3 lgl:grid-cols-4 xl:grid-cols-5 gap-6">
             {posts.map(post => (
               <PostCard
                 key={post.id}

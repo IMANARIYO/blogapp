@@ -1,146 +1,184 @@
+import LoginModal from "./LoginModal";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { Button, Modal, Typography } from "@mui/material";
+import { addCommentToPost, getCommentsForPost } from "../../../services/commentsService";
+import { getUserFromLocalStorage } from "../../../services/userService";
 
-import {
-  Button,
-  Modal,
-  Typography,
-} from "@mui/material";
-
-// Base URL for images
 const BASE_URL = 'http://localhost:4444'; // Replace with your actual base URL
 
 const SinglePostModal = ({ show, handleClose, post }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [user, setUser] = useState(getUserFromLocalStorage());
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (post) {
-      // Fetch comments for the post from the post object
-      setComments(post.comments || []);
+      fetchComments();
     }
   }, [post]);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    setUser(userData);
+  }, []);
+
+  const fetchComments = async () => {
+    try {
+      const data = await getCommentsForPost(post.id);
+      setComments(data);
+    } catch (error) {
+      // Handle error if needed
+    }
+  };
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
-    if (newComment.trim()) {
-      // Here you would call your API to post the comment
-      const newCommentData = {
-        id: Date.now(), // Unique id for the new comment
-        user: {
-          fullNames: 'Current User', // Replace with actual user data
-          profilePicture: 'https://via.placeholder.com/50', // Replace with actual user data
-        },
-        content: newComment,
-        createdAt: new Date().toISOString(),
-      };
+    if (!user) {
+      let user=getUserFromLocalStorage();
+  
+      if(!user){
+        setLoginModalOpen(true); // Open login modal if user is not logged in 
+      
+        return;
+      }
+     else{setUser(user)}
+    }
 
-      // Update state with the new comment (simulating API call)
-      setComments([...comments, newCommentData]);
-      setNewComment('');
+    if (newComment.trim()) {
+      try {
+        await addCommentToPost(post.id, newComment);
+        setNewComment('');
+        fetchComments();
+      } catch (error) {
+        // Handle error if needed
+      }
     }
   };
 
-  const imageUrl = post?.image ? post.image : null;
+  const imageUrl = post?.image ? `${BASE_URL}${post.image}` : null;
 
   return (
-    <Modal
-      open={show}
-      onClose={handleClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <div style={{ 
-        position: 'absolute', 
-        top: '50%', 
-        left: '50%', 
-        transform: 'translate(-50%, -50%)', 
-        width: '80%', 
-        maxWidth: '800px', 
-        backgroundColor: 'white', 
-        padding: '20px', 
-        borderRadius: '8px', 
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' 
-      }}>
-        <Typography variant="h6" id="modal-title">
-          {post?.title}
-        </Typography>
-        <div className="flex flex-col mt-4">
-          {imageUrl && (
-            <img
-              className="w-full mb-4 rounded-lg"
-              src={imageUrl}
-              alt={post.title}
-              style={{ maxHeight: '400px', objectFit: 'cover' }}
-            />
-          )}
-          <p className="text-gray-700 whitespace-pre-line">{post?.content}</p>
-          
-          <div className="mt-4">
-            <h5 className="text-lg font-semibold mb-2">Add a Comment:</h5>
-            <form onSubmit={handleCommentSubmit} className="mb-4">
-              <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg"
-                rows="4"
-                value={newComment}
-                onChange={handleCommentChange}
-                placeholder="Type your comment here..."
-                style={{ resize: 'vertical' }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className="mt-2 w-full py-2"
-                disabled={!newComment.trim()}
-              >
-                Submit
-              </Button>
-            </form>
+    <>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          maxWidth: '800px',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: '90vh',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            padding: '20px',
+            borderBottom: '1px solid #ddd',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <Typography variant="h6" id="modal-title">
+              {post?.title}
+            </Typography>
+            <Button variant="outlined" onClick={handleClose}>
+              Close
+            </Button>
           </div>
-
-          <div className="mt-4">
-            <h5 className="text-lg font-semibold mb-2">
-              Comments ({comments.length}):
-            </h5>
-            {comments.length > 0 ? (
-              comments.map(comment => (
-                <div key={comment.id} className="border border-gray-300 p-3 mb-3 rounded-lg shadow-sm">
-                  <div className="flex items-start mb-2">
-                    <img
-                      className="w-10 h-10 rounded-full mr-3 border-2 border-gray-200"
-                      src={comment.user.profilePicture}
-                      alt={comment.user.fullNames}
-                    />
-                    <div>
-                      <strong className="text-gray-800">{comment.user.fullNames}</strong>
-                      <span className="block text-gray-500 text-xs">
-                        {new Date(comment.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-gray-700 whitespace-pre-line">{comment.content}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No comments yet.</p>
+          <div style={{
+            padding: '20px',
+            overflowY: 'auto',
+            flexGrow: 1,
+          }}>
+            {imageUrl && (
+              <img
+                className="w-full mb-4 rounded-lg"
+                src={imageUrl}
+                alt={post.title}
+                style={{ maxHeight: '400px', objectFit: 'cover' }}
+              />
             )}
+            <p className="text-gray-700 whitespace-pre-line">{post?.content}</p>
+
+            <div className="mt-4">
+              <h5 className="text-lg font-semibold mb-2">Add a Comment:</h5>
+              <form onSubmit={handleCommentSubmit} className="mb-4">
+                <textarea
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  rows="4"
+                  value={newComment}
+                  onChange={handleCommentChange}
+                  placeholder="Type your comment here..."
+                  style={{ resize: 'vertical' }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className="mt-2 w-full py-2"
+                  disabled={!newComment.trim()}
+                >
+                  Submit
+                </Button>
+              </form>
+            </div>
+
+            <div className="mt-4">
+              <h5 className="text-lg font-semibold mb-2">
+                Comments ({comments.length}):
+              </h5>
+              {comments.length > 0 ? (
+                comments.map(comment => (
+                  <div key={comment.id} className="border border-gray-300 p-3 mb-3 rounded-lg shadow-sm">
+                    <div className="flex items-start mb-2">
+                      <img
+                        className="w-10 h-10 rounded-full mr-3 border-2 border-gray-200"
+                        src={comment.user?.profilePicture ? `${BASE_URL}${comment.user.profilePicture}` : 'https://via.placeholder.com/50'}
+                        alt={comment.user?.fullNames || 'User'}
+                      />
+                      <div>
+                        <strong className="text-gray-800">{comment.user?.fullNames || 'Anonymous'}</strong>
+                        <span className="block text-gray-500 text-xs">
+                          {new Date(comment.createdAt).toLocaleDateString()} at {new Date(comment.createdAt).toLocaleTimeString()}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 whitespace-pre-line">{comment.content}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No comments yet.</p>
+              )}
+            </div>
           </div>
         </div>
-        <Button 
-          variant="outlined" 
-          onClick={handleClose} 
-          style={{ marginTop: '20px' }}
-        >
-          Close
-        </Button>
-      </div>
-    </Modal>
+      </Modal>
+
+      <LoginModal
+        open={loginModalOpen}
+        handleClose={() => setLoginModalOpen(false)}
+        onLoginSuccess={() => {
+          setLoginModalOpen(false);
+          fetchComments(); // Refresh comments if needed after login
+        }}
+      />
+    </>
   );
 };
 
