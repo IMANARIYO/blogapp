@@ -1,10 +1,9 @@
 import React from "react";
-import { POST_CATEGORIES } from "./../../services/postService";
+import { POST_CATEGORIES } from "../../services/postService";
 
-const Footer = () => {
+const Footer = ({ onCategorySelect }) => {
   const onCategoryClick = (category) => {
-    // Handle category click (e.g., filter posts or navigate to a different section)
-    console.log(`Category clicked: ${category}`);
+    onCategorySelect(category);
   };
 
   return (

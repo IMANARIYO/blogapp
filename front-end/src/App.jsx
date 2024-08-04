@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-route
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null)
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
 // Retrieve user data from local storage
 useEffect(() => {
@@ -39,14 +39,23 @@ useEffect(() => {
     setIsLoggedIn(false);
     navigate('/login');
   };
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     
       <div>
         <Navbar user={user} onLogout={handleLogout} />
         <Routes>
-          <Route path="/" element={<ViewPostsPage />} />
-          <Route path="/posts" element={<ViewPostsPage />} /> 
+        <Route
+          path="/"
+          element={<ViewPostsPage selectedCategory={selectedCategory} />}
+        />
+        <Route
+          path="/posts"
+          element={<ViewPostsPage selectedCategory={selectedCategory} />}
+        />
           <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgetPasswordPage />} />
@@ -57,7 +66,7 @@ useEffect(() => {
 
           {/* <Route path="/post/:id" element={<SinglePostViewPage />} /> */}
         </Routes>
-        <Footer />
+        <Footer onCategorySelect={handleCategorySelect} />
       </div>
   
   );
