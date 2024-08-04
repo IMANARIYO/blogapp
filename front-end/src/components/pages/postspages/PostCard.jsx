@@ -3,7 +3,7 @@ import React from "react";
 const PostCard = ({ post, onOpenModal }) => {
   const BASE_URL = 'http://localhost:4444';
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-4 w-96">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-4 ">
       {/* Image Section */}
       <div className="w-full h-56 overflow-hidden rounded-md">
         <img
