@@ -6,7 +6,7 @@ import { getUserFromLocalStorage } from "../services/userService.js";
 const Navbar = ({ onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef(null);
-  const [user, setUser] = useState( getUserFromLocalStorage());
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   // Function to fetch user from localStorage

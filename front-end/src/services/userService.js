@@ -2,16 +2,24 @@
 
 export const getUserFromLocalStorage = () => {
     const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      return null;
+    }
   };
-  getUserFromLocalStorage();
+  
+
   import api, { apiMultipart } from './api'; // Adjust the path as needed
 
 // Get all users
 export const getAllUsers = async () => {
   try {
     const response = await api.get('/auth/getAllUsers');
+    console.log(response.data);
     return response.data;
+
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;

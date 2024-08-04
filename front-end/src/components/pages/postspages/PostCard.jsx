@@ -3,7 +3,7 @@ import React from "react";
 const PostCard = ({ post, onOpenModal }) => {
   const BASE_URL = 'http://localhost:4444';
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-4">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-4 w-96">
       {/* Image Section */}
       <div className="w-full h-56 overflow-hidden rounded-md">
         <img
@@ -25,10 +25,10 @@ const PostCard = ({ post, onOpenModal }) => {
       {/* Author and Time Section */}
       <div className="flex items-center justify-between border-t border-gray-200 pt-2">
         <div className="flex items-center">
-        <img
-            src={post.author.profilePicture ? `${BASE_URL}${post.author.profilePicture}` : 'https://via.placeholder.com/50'}
+          <img
+            src={post.author.profilePicture || 'https://via.placeholder.com/50'}
             alt={post.author.fullNames}
-            className="w-12 h-12 rounded-full border-2 border-gray-300 object-cover"
+            className="w-10 h-10 rounded-full mr-3 border-2 border-gray-300"
           />
           <div>
             <span className="font-medium text-gray-800 text-lg">{post.author.fullNames}</span>

@@ -32,7 +32,7 @@ const LoginPage = () => {
       setSuccess('Login successful!');
       setError('');
       
-      navigate('/'); // Redirect to home page on successful login
+      navigate('/dashboard'); // Redirect to home page on successful login
       window.location.reload(); // Reload the page
     } catch (err) {
       console.error(err);
