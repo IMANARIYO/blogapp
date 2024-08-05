@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { serverurl } from "../../../services/api";
 
 const AuthorCard = ({ user }) => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const AuthorCard = ({ user }) => {
       {/* User Image */}
       <div className="w-16 h-16 overflow-hidden rounded-full">
         <img
-          src={user.profilePicture ? `http://localhost:4444${user.profilePicture}` : 'https://via.placeholder.com/150'}
+          src={user.profilePicture ? `${user.profilePicture}` : 'https://via.placeholder.com/150'}
           alt={user.fullNames}
           className="w-full h-full object-cover"
         />

@@ -1,9 +1,10 @@
 import AuthorCard from "./UserCard";
 import React, { useEffect, useState } from "react";
+import { default_users } from "../../../services/constants/users";
 import { getAllUsers } from "../../../services/userService";
 
 const AuthorsPage = () => {
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] =  useState(default_users);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,9 +15,11 @@ const AuthorsPage = () => {
         const users = response.data; // Adjust based on your API response structure
 
         // Setting authors with complete user data
-        setAuthors(users);
+        if (users && users.length > 0) {
+          setAuthors(users);
+        }
       } catch (error) {
-        setError('Failed to fetch users');
+       
         console.error('Error fetching users:', error);
       } finally {
         setLoading(false);

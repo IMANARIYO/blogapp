@@ -2,13 +2,17 @@ import LoginModal from "./LoginModal";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Typography } from "@mui/material";
+import { serverurl } from "../../../services/api";
 import { addCommentToPost, getCommentsForPost } from "../../../services/commentsService";
+import { default_comments } from "../../../services/constants/comments";
 import { getUserFromLocalStorage } from "../../../services/userService";
 
-const BASE_URL = 'http://localhost:4444'; // Replace with your actual base URL
+const BASE_URL = serverurl ||'' ; // Replace with your actual base URL
 
 const SinglePostModal = ({ show, handleClose, post }) => {
-  const [comments, setComments] = useState([]);
+  const filteredDefaultComments = default_comments.filter(comment => comment.postId === post.id);
+  const [comments, setComments] = useState(filteredDefaultComments
+    );
   const [newComment, setNewComment] = useState('');
   const [user, setUser] = useState(getUserFromLocalStorage());
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -62,8 +66,13 @@ const SinglePostModal = ({ show, handleClose, post }) => {
     }
   };
 
-  const imageUrl = post?.image ? `${BASE_URL}${post.image}` : null;
-
+  // const imageUrl = post?.image ? `${BASE_URL}${post.image}` : null;
+  const constructImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${BASE_URL}${imagePath}`;
+  };
+  const imageUrl = constructImageUrl(post?.image);
   return (
     <>
       <Modal

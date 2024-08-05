@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import api from "../../../services/api";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { getLastDefaultUser } from "../../../services/constants/users";
 
 import {
   Avatar,
@@ -35,9 +36,22 @@ const LoginPage = () => {
       navigate('/dashboard'); // Redirect to home page on successful login
       window.location.reload(); // Reload the page
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');
+        // Check if the default user exists and matches
+        const defaultUser = getLastDefaultUser();
+        if (defaultUser.email == data.email && defaultUser.password == data.password) {
+          localStorage.setItem('token', 'dummy-token'); // Set a dummy token
+          localStorage.setItem('user', JSON.stringify(defaultUser)); // Save default user info
+          setSuccess('Login successful with default user!');
+          setError('');
+          navigate('/dashboard'); // Redirect to dashboard or main page
+        } else {
+          console.log('Default user does not match',defaultUser);
+          console.log('data to match',data);
+          setError('Invalid username or password');
+        }
     }
   };
 

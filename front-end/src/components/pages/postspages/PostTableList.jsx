@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { api } from "./api";
 import { POST_CATEGORIES } from "./constants/categories";
 
+se
 const BASE_URL = 'http://localhost:4444';
 const PostListPage = () => {
   const [posts, setPosts] = useState([]);

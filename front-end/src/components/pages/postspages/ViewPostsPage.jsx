@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import SinglePostModal from "./SinglePostModal";
 import api from "../../../services/api";
 import { useLocation } from "react-router-dom";
+import { DEFAULT_POSTS } from "../../../services/constants/posts";
 
 const POSTS_PER_PAGE = 10;
+// Default posts data
 
 const ViewPostsPage = ({ selectedCategory }) => {
-  const [posts, setPosts] = useState([]);
-  const [allPosts, setAllPosts] = useState([]);
+  const [posts, setPosts] = useState(DEFAULT_POSTS);
+  const [allPosts, setAllPosts] = useState(DEFAULT_POSTS);
   const [modalShow, setModalShow] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [hasMore, setHasMore] = useState(true);
@@ -53,6 +55,7 @@ const ViewPostsPage = ({ selectedCategory }) => {
   useEffect(() => {
     fetchAllPosts();
   }, []);
+
 
   useEffect(() => {
     filterPosts();

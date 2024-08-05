@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import api from "../../../services/api";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { addDefaultUser, defaultUser, default_users, getLastDefaultUser } from "../../../services/constants/users";
 
 import {
   Box,
@@ -36,10 +37,21 @@ const SignupPage = () => {
       });
       setSuccess(response.data.message);
       setError('');
+   
       setTimeout(() => navigate('/login'), 2000); // Redirect to login page after 2 seconds
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');
+         // Create a new default user with an incremented ID
+      const newUser = {
+        ...getLastDefaultUser(),
+        id: default_users.length + 1,
+        email: data.email, // Override with the actual email
+        password: data.password // Note: Password should be hashed in a real application
+      };
+      addDefaultUser(newUser);
+      setSuccess('Signup successful with  user  to be created when api isdown for tetsing puposes!');
+      setTimeout(() => navigate('/login'), 2000); // Redirect to login page after 2 seconds
     }
   };
 

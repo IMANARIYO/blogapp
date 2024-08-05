@@ -1,5 +1,32 @@
 import axios from "axios";
 
+// Your API base URL
+const originalServerUrl = 'http://localhost:4444';
+let serverurl = originalServerUrl; // Initially set to originalServerUrl
+
+// Function to check if the server is running
+const checkServerStatus = async () => {
+  try {
+    await axios.get(`${originalServerUrl}/health-check`); // Adjust endpoint as necessary
+    console.log('Server is running');
+    return true;
+  } catch (error) {
+    console.error('Server is not available', error);
+    return false;
+  }
+};
+
+// Check server status and update serverurl
+const updateServerUrl = async () => {
+  const serverIsRunning = await checkServerStatus();
+  if (!serverIsRunning) {
+    serverurl = '';
+  }
+};
+
+// Immediately update serverurl on module load
+await updateServerUrl(); // Ensure it runs and completes
+
 const api = axios.create({
   baseURL: 'http://localhost:4444', // Your API base URL
   headers: {
@@ -30,7 +57,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export const serverurl= 'http://localhost:4444'
+
 export const apiMultipart = axios.create({
   baseURL: serverurl,
   headers: {
@@ -59,5 +86,5 @@ apiMultipart.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+export { serverurl };
 export default api;

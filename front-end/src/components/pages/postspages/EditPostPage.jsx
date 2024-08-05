@@ -1,4 +1,5 @@
 import React from "react";
+import { serverurl } from "../../../services/api";
 
 const EditPostPage = () => {
     const { id } = useParams();
