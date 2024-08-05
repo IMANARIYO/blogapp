@@ -1,10 +1,11 @@
 import { models } from "../src/models/index.js";
 
-const { Comment, Post, User } = models
+const { Comment, Post, User } = models;
+
 // Define the seedComments function
 export const seedComments = async () => {
   try {
-    // Insert comments into the Comments table
+    // Insert predefined comments
     await Comment.bulkCreate([
       {
         content: 'This is a comment on the first post by user 2.',
@@ -20,16 +21,34 @@ export const seedComments = async () => {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-      // Add more comments as needed
-    ])
+    ]);
 
-    // console.log('Comments seeded successfully!')
+    console.log('Predefined comments seeded successfully!');
+
+    // Generate additional comments
+    const numberOfAdditionalComments = 10; // Adjust the number of additional comments
+    const additionalComments = [];
+
+    for (let i = 0; i < numberOfAdditionalComments; i++) {
+      additionalComments.push({
+        content: `This is comment number ${i + 1}.`,
+        postId: (i % 2) + 1, // Cycle through posts 1 and 2
+        userId: (i % 5) + 1, // Cycle through users 1 to 5
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+    }
+
+    // Bulk create additional comments
+    await Comment.bulkCreate(additionalComments);
+
+    console.log('Additional comments seeded successfully!');
   } catch (error) {
-    console.error('Error seeding comments:', error)
+    console.error('Error seeding comments:', error);
   }
-}
+};
 
-// // If this file is run directly, execute the seedComments function
-// if (require.main === module) {
-//   seedComments().catch(console.error);
-// }
+// If this file is run directly, execute the seedComments function
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedComments().catch(console.error);
+}

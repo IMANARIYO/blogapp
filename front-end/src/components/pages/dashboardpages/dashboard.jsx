@@ -1,40 +1,15 @@
-import React, { useEffect, useState } from "react";
+import CommentsManagement from "./CommentsManagement";
+import PostsManagement from "./PostsManagement";
+import React from "react";
+import UsersManagement from "./UsersManagement";
 import { Button, Card, CardContent, Grid, Paper, Typography } from "@mui/material";
-import { Link, Outlet } from "react-router-dom";
-import { getCommentsForPost } from "../../../services/commentsService";
-import { getAllPosts } from "../../../services/postService";
-import { getAllUsers } from "../../../services/userService";
+import { Link, Outlet, Route, Routes } from "react-router-dom";
 
 const Dashboard = () => {
-  const [userCount, setUserCount] = useState(0);
-  const [postCount, setPostCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
-
-  useEffect(() => {
-    fetchSummaryData();
-  }, []);
-
-  const fetchSummaryData = async () => {
-    try {
-      const users = await getAllUsers();
-      setUserCount(users.length);
-
-      const posts = await getAllPosts();
-      setPostCount(posts.length);
-
-      let totalComments = 0;
-      for (const post of posts) {
-        const comments = await getCommentsForPost(post.id);
-        totalComments += comments.length;
-      }
-      setCommentCount(totalComments);
-    } catch (error) {
-      console.error("Error fetching summary data:", error);
-    }
-  };
-
+    alert(hello)
   return (
     <div style={{ padding: 20 }}>
+      {/* Dashboard Navigation */}
       <Typography variant="h4" gutterBottom>
         Dashboard
       </Typography>
@@ -43,9 +18,16 @@ const Dashboard = () => {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h6" component="div">
-                Total Users
+                Manage Comments
               </Typography>
-              <Typography variant="h4">{userCount}</Typography>
+              <Button
+                component={Link}
+                to="/dashboard/manage-comments"
+                variant="contained"
+                color="primary"
+              >
+                Go to Comments Management
+              </Button>
             </CardContent>
           </Card>
         </Grid>
@@ -53,9 +35,16 @@ const Dashboard = () => {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h6" component="div">
-                Total Posts
+                Manage Posts
               </Typography>
-              <Typography variant="h4">{postCount}</Typography>
+              <Button
+                component={Link}
+                to="/dashboard/manage-posts"
+                variant="contained"
+                color="primary"
+              >
+                Go to Posts Management
+              </Button>
             </CardContent>
           </Card>
         </Grid>
@@ -63,46 +52,33 @@ const Dashboard = () => {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h6" component="div">
-                Total Comments
+                Manage Users
               </Typography>
-              <Typography variant="h4">{commentCount}</Typography>
+              <Button
+                component={Link}
+                to="/dashboard/manage-users"
+                variant="contained"
+                color="primary"
+              >
+                Go to Users Management
+              </Button>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+
+      {/* Nested Routing */}
       <div style={{ marginTop: 20 }}>
         <Typography variant="h6" gutterBottom>
           Management Sections
         </Typography>
-        <Paper style={{ padding: 20, display: 'flex', gap: 10 }}>
-          <Button
-            component={Link}
-            to="/manage-comments"
-            variant="contained"
-            color="primary"
-          >
-            Comments Manage 
-          </Button>
-          <Button
-            component={Link}
-            to="/manage-posts"
-            variant="contained"
-            color="primary"
-          >
-             Posts management
-          </Button>
-          <Button
-            component={Link}
-            to="/manage-users"
-            variant="contained"
-            color="primary"
-          >
-             Users management
-          </Button>
-        </Paper>
+        <Routes>
+          <Route path="manage-comments" element={<CommentsManagement />} />
+          <Route path="manage-posts" element={<PostsManagement />} />
+          <Route path="manage-users" element={<UsersManagement />} />
+          <Route path="/" element={<Typography variant="h6">Please select a section.</Typography>} /> {/* Default route */}
+        </Routes>
       </div>
-      {/* Outlet for nested routes */}
-      <Outlet />
     </div>
   );
 };

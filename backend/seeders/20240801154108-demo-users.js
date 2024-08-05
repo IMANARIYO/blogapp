@@ -6,40 +6,62 @@ const { User } = models;
 // Define the seedUsers function
 export const seedUsers = async () => {
   try {
-    // Hash the passwords for each user
+    // Hash the passwords for admin and regular users
     const adminHashedPassword = await passHashing('admin123');
     const userHashedPassword = await passHashing('user123');
 
-    // Bulk create users with unique passwords
-    const createdUsers = await User.bulkCreate([
+    // First, insert the specific admin and user
+    await User.bulkCreate([
       {
         username: 'admin',
         email: 'admin@example.com',
         password: adminHashedPassword,
         profilePicture: '/media/1722719109044-profile-1.jpeg',
         role: 'admin',
-        fullNames: "Imanariyobaptiste",
+        fullNames: 'Imanariyobaptiste',
         gender: 'male',
         phoneNumber: '0787795163'
       },
       {
         username: 'user',
         email: 'user@example.com',
-        fullNames: "userfull names",
+        fullNames: 'User Full Name',
         password: userHashedPassword,
         profilePicture: '/media/1722719109044-profile-1.jpeg',
         role: 'user',
         gender: 'male',
         phoneNumber: '0787795163'
-      },
+      }
     ]);
 
-    console.log('Users seeded successfully!');
-    
-    // Fetch and log the inserted users to verify
+    console.log('Admin and user seeded successfully!');
+
+    // Generate and insert additional users
+    const numberOfAdditionalUsers = 10; // Adjust as needed
+    const additionalUsers = [];
+
+    for (let i = 0; i < numberOfAdditionalUsers; i++) {
+      additionalUsers.push({
+        username: `user${i + 3}`, // Continue numbering from user3
+        email: `user${i + 3}@example.com`,
+        password: userHashedPassword,
+        profilePicture: '/media/1722719109044-profile-1.jpeg',
+        role: 'user',
+        fullNames: `User ${i + 3}`,
+        gender: i % 2 === 0 ? 'male' : 'female', // Alternate gender
+        phoneNumber: `07877951${i + 20}` // Generate dummy phone numbers
+      });
+    }
+
+    // Bulk create additional users
+    await User.bulkCreate(additionalUsers);
+
+    console.log('Additional users seeded successfully!');
+
+    // Optionally fetch and log the inserted users to verify
     // const insertedUsers = await User.findAll({
     //   where: {
-    //     username: ['admin', 'user']
+    //     username: ['admin', 'user'].concat(additionalUsers.map(user => user.username))
     //   }
     // });
     // console.log('Inserted Users:', insertedUsers);

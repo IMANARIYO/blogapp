@@ -40,10 +40,11 @@ const ViewPostsPage = ({ selectedCategory }) => {
     
     if (selectedCategory) {
       filteredPosts = filteredPosts.filter(post => post.category === selectedCategory);
+    
     }
     
     if (authorId) {
-      filteredPosts = filteredPosts.filter(post => post.authorId === parseInt(authorId, 10));
+      filteredPosts = filteredPosts.filter(post => post.authorId ==authorId);
     }
     
     setPosts(filteredPosts);

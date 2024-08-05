@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import api from "../../../services/api";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { addAdmin, deleteUserById, getAllUsers, removeAdmin, updateUserById } from "../../../services/userService";
@@ -13,8 +14,8 @@ const UsersManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const data = await getAllUsers();
-      setUsers(data);
+      const response = await api.get('/auth/getAllUsers');
+      setUsers(response.data.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }

@@ -58,10 +58,13 @@ const Navbar = ({ onLogout }) => {
       <div className="hidden md:flex items-center space-x-6">
         <Link to="/" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Home</Link>
         <Link to="/authors" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Authors</Link>
+        <Link to="/AdminDashoard" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">AdminDashoard</Link>
         {user ? (
           <>
+            <Link to="/dashboard" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">dashboard</Link>
             <Link to="/create-post" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Create Post</Link>
-            <span className="text-gray-600 text-lg">Hello, {user.fullNames}</span>
+           
+           
             <button 
               onClick={handleLogout} 
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors text-lg focus:outline-none"

@@ -5,7 +5,7 @@ const { Post } = models;
 // Define the seedPosts function
 export const seedPosts = async () => {
   try {
-    // Insert posts into the Posts table
+    // Insert the predefined posts
     await Post.bulkCreate([
       {
         title: 'First Post',
@@ -26,8 +26,29 @@ export const seedPosts = async () => {
         updatedAt: new Date(),
       },
     ]);
-    
-    // console.log('Posts seeded successfully!');
+
+    console.log('Predefined posts seeded successfully!');
+
+    // Generate additional posts
+    const numberOfAdditionalPosts = 10; // Adjust the number of additional posts
+    const additionalPosts = [];
+
+    for (let i = 0; i < numberOfAdditionalPosts; i++) {
+      additionalPosts.push({
+        title: `Post ${i + 3}`, // Continue numbering from Post 3
+        content: `Content of post ${i + 3}.`,
+        category: `category${(i % 5) + 1}`, // Rotate through 5 categories
+        authorId: (i % 5) + 1, // Cycle through 5 authors
+        image: '/media/1722727213995-tree.jpg',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    // Bulk create additional posts
+    await Post.bulkCreate(additionalPosts);
+
+    console.log('Additional posts seeded successfully!');
   } catch (error) {
     console.error('Error seeding posts:', error);
   }
