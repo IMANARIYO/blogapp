@@ -7,8 +7,7 @@ let serverurl = originalServerUrl; // Initially set to originalServerUrl
 // Function to check if the server is reachable
 const checkServerStatus = async () => {
   try {
-    // Attempt to get a basic resource or just check connectivity
-    await axios.get(`${originalServerUrl}/status`, { timeout: 5000 }); // Add a timeout for better control
+    await axios.get(`${originalServerUrl}/status`, { timeout: 5000 });
     console.log('Server is reachable');
     return true;
   } catch (error) {
@@ -25,67 +24,78 @@ const updateServerUrl = async () => {
   }
 };
 
-// Immediately update serverurl on module load
-await updateServerUrl(); // Ensure it runs and completes
+// Initialize and export the API instance
+const initializeApi = async () => {
+  await updateServerUrl();
 
-const api = axios.create({
-  baseURL: 'http://localhost:4444', // Your API base URL
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+  const api = axios.create({
+    baseURL: serverurl,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-// Request interceptor
-api.interceptors.request.use(
-  config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  api.interceptors.request.use(
+    config => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    error => Promise.reject(error)
+  );
+
+  api.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response.status === 401) {
+        console.error('Unauthorized request');
+      }
+      return Promise.reject(error);
     }
-    return config;
-  },
-  error => Promise.reject(error)
-);
+  );
 
-// Response interceptor
-api.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response.status === 401) {
-      console.error('Unauthorized request');
-      // Handle unauthorized access (e.g., redirect to login)
+  return api;
+};
+
+// Initialize and export the apiMultipart instance
+const initializeApiMultipart = async () => {
+  await updateServerUrl();
+
+  const apiMultipart = axios.create({
+    baseURL: serverurl,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  apiMultipart.interceptors.request.use(
+    config => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    error => Promise.reject(error)
+  );
+
+  apiMultipart.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response.status === 401) {
+        console.error('Unauthorized request');
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
 
-export const apiMultipart = axios.create({
-  baseURL: serverurl,
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-});
+  return apiMultipart;
+};
 
-apiMultipart.interceptors.request.use(
-  config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => Promise.reject(error)
-);
+// Export promises that resolve to the initialized API instances
+const apiPromise = initializeApi();
+const apiMultipartPromise = initializeApiMultipart();
 
-apiMultipart.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response.status === 401) {
-      console.error('Unauthorized request');
-      // Handle unauthorized access (e.g., redirect to login)
-    }
-    return Promise.reject(error);
-  }
-);
-export { serverurl };
-export default api;
+export { apiPromise, apiMultipartPromise, serverurl };

@@ -2,8 +2,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { apiPromise } from "../../../services/api";
-import { addDefaultUser, default_users, getLastDefaultUser } from "../../../services/constants/users";
+import { addDefaultUser, defaultUser, default_users, getLastDefaultUser } from "../../../services/constants/users";
+
+import { apiPromise}from "../../../services/api";
 
 import {
   Box,
@@ -25,9 +26,9 @@ const SignupPage = () => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('phoneNumber', data.phoneNumber);
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
 
     try {
       const api = await apiPromise;
@@ -38,22 +39,20 @@ const SignupPage = () => {
       });
       setSuccess(response.data.message);
       setError('');
-
+   
       setTimeout(() => navigate('/login'), 2000); // Redirect to login page after 2 seconds
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');
-
-      // Create a new default user with an incremented ID
+         // Create a new default user with an incremented ID
       const newUser = {
         ...getLastDefaultUser(),
         id: default_users.length + 1,
         email: data.email, // Override with the actual email
-        password: data.password, // Note: Password should be hashed in a real application
-        phoneNumber: data.phoneNumber, // Add phone number
+        password: data.password // Note: Password should be hashed in a real application
       };
       addDefaultUser(newUser);
-      setSuccess('Signup successful with a default user created for testing purposes!');
+      setSuccess('Signup successful with  user  to be created when api isdown for tetsing puposes!');
       setTimeout(() => navigate('/login'), 2000); // Redirect to login page after 2 seconds
     }
   };
@@ -109,9 +108,41 @@ const SignupPage = () => {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                label="Full Names"
+                id="fullNames"
+                {...register('fullNames')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                label="Username"
+                id="username"
+                {...register('username')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                label="Gender"
+                id="gender"
+                {...register('gender')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
                 label="Phone Number"
                 id="phoneNumber"
                 {...register('phoneNumber')}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                type="file"
+                id="profilePicture"
+                {...register('profilePicture')}
               />
             </Box>
             <Button

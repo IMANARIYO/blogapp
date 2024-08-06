@@ -1,9 +1,10 @@
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";
-import api from "../../../services/api";
 import { DataGrid } from "@mui/x-data-grid";
 import { ToastContainer, toast } from "react-toastify";
 import { getUserFromLocalStorage } from "../../../services/userService";
+
+import{ apiPromise}from "../../../services/api";
 
 import {
   Button,
@@ -33,6 +34,7 @@ const UsersManagement = () => {
 
   const fetchUsers = async () => {
     try {
+      const api = await apiPromise;
       const response = await api.get("/auth/getAllUsers");
       const usersWithCounts = response.data.data.map((user) => ({
         ...user,

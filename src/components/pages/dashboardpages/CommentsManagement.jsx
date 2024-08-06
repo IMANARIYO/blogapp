@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import SinglePostModal from "../postspages/SinglePostModal";
-import api, { serverurl } from "../../../services/api";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextareaAutosize } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
+import { apiPromise, serverurl } from "../../../services/api";
 import { getPostById } from "../../../services/postService";
 import { getUserId, getUserRole } from "../../../services/userService";
 
@@ -30,31 +30,32 @@ const CommentsManagement = ({ postId }) => {
       const userRole = getUserRole();
       setRole(userRole);
 
-      if (userRole === 'user' && !postId===0) {
-        console.log
+      if (userRole === 'user' && postId) {
+        
         await fetchCommentsForUserPosts();
       } 
-      // else if (postId) {
-      //   await fetchCommentsForPost(postId);
-      // } 
+      else if (postId) {
+        await fetchCommentsForPost(postId);
+      } 
       else {
         await fetchAllComments();
       }
     };
 
     fetchRoleAndComments();
-  }, [ role]);
+  }, [ postId,role]);
 
-  // const fetchCommentsForPost = async (postId) => {
-  //   try {
-  //     const data = await getCommentsForPost(postId);
-  //     setComments(data);
-  //   } catch (error) {
-  //     toast.error("Error fetching comments: " + error.message);
-  //   }
-  // };
+  const fetchCommentsForPost = async (postId) => {
+    try {
+      const data = await getCommentsForPost(postId);
+      setComments(data);
+    } catch (error) {
+      toast.error("Error fetching comments: " + error.message);
+    }
+  };
 
   const fetchCommentsForUserPosts = async () => {
+    const api = await apiPromise;
     const userId = getUserId();
     try {
       const data = await api.get(`/comments/users/${userId}/posts/comments`);

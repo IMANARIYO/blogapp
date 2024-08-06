@@ -1,8 +1,9 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { useState } from "react";
-import api, { serverurl } from "../../../services/api";
 import { Avatar, Box, Button, Grid, Link as MuiLink, Modal, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import {apiPromise }from "../../../services/api";
 
 const LoginModal = ({ open, handleClose, onLoginSuccess }) => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ const LoginModal = ({ open, handleClose, onLoginSuccess }) => {
     e.preventDefault();
 
     try {
+      const api = await apiPromise; 
       const response = await api.post('/auth/login', { email, password });
       const { access_token, user } = response.data;
       localStorage.setItem('token', access_token);

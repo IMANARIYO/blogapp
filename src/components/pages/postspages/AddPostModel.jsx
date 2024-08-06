@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { apiMultipart } from "../../../services/api";
-import { POST_CATEGORIES } from "../../../services/postService";
+import { apiMultipartPromise } from "../../../services/api";
+import { POST_CATEGORIES, getAllPosts } from "../../../services/postService";
 
 const AddPostModel = ({ show, handleClose }) => {
     const [title, setTitle] = useState('');
@@ -20,7 +20,9 @@ const AddPostModel = ({ show, handleClose }) => {
         if (image) formData.append('image', image);
 
         try {
+            const apiMultipart = await apiMultipartPromise;
             await apiMultipart.post('/posts', formData);
+            getAllPosts();
             handleClose(); // Close the modal after submission
             // navigate('/');
              // Redirect to home page or another appropriate page

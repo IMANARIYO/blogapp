@@ -61,9 +61,10 @@ const Navbar = ({ onLogout }) => {
       <div className="hidden md:flex items-center space-x-6">
         <Link to="/" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Home</Link>
         <Link to="/authors" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Authors</Link>
-        <Link to="/admin-dashboard" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Admin Dashboard</Link>
+
         {user ? (
           <>
+          <Link to="/admin-dashboard" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Admin Dashboard</Link>
             <Link to="/dashboard" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Dashboard</Link>
             <Link to="/create-post" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Create Post</Link>
             <button 
@@ -109,11 +110,13 @@ const Navbar = ({ onLogout }) => {
       {isMobileMenuOpen && (
         <div ref={mobileMenuRef} className="md:hidden absolute top-16 right-4 bg-gray-800 text-white w-48 rounded-md shadow-lg z-50">
           <div className="flex flex-col p-2 space-y-2">
+            <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
             <Link to="/" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Home</Link>
             {user ? (
               <>
+                     <Link to="/dashboard" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Dashboard</Link>
                 <Link to="/create-post" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Create Post</Link>
-                <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
+                <Link to="/admin-dashboard" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Admin Dashboard</Link>
                 <button 
                   onClick={() => {
                     handleLogout();

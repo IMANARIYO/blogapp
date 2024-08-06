@@ -7,21 +7,20 @@ import { addCommentToPost, getCommentsForPost } from "../../../services/comments
 import { default_comments } from "../../../services/constants/comments";
 import { getUserFromLocalStorage } from "../../../services/userService";
 
-const BASE_URL = serverurl ||'' ; // Replace with your actual base URL
+const BASE_URL = serverurl || ''; // Replace with your actual base URL
 
 const SinglePostModal = ({ show, handleClose, post }) => {
-  const filteredDefaultComments = default_comments.filter(comment => comment.postId === post.id);
-  const [comments, setComments] = useState(filteredDefaultComments
-    );
+  const filteredDefaultComments = default_comments.filter(comment => comment.postId === post?.id);
+  const [comments, setComments] = useState(filteredDefaultComments);
   const [newComment, setNewComment] = useState('');
   const [user, setUser] = useState(getUserFromLocalStorage());
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    if (post) {
+    if (post && show) {
       fetchComments();
     }
-  }, [post]);
+  }, [post, show]); // Dependency array includes post and show
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -33,7 +32,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       const data = await getCommentsForPost(post.id);
       setComments(data);
     } catch (error) {
-      // Handle error if needed
+      console.error("Failed to fetch comments:", error); // Log any errors
     }
   };
 
@@ -45,14 +44,14 @@ const SinglePostModal = ({ show, handleClose, post }) => {
     e.preventDefault();
 
     if (!user) {
-      let user=getUserFromLocalStorage();
-  
-      if(!user){
-        setLoginModalOpen(true); // Open login modal if user is not logged in 
-      
+      let user = getUserFromLocalStorage();
+
+      if (!user) {
+        setLoginModalOpen(true); // Open login modal if user is not logged in
         return;
+      } else {
+        setUser(user);
       }
-     else{setUser(user)}
     }
 
     if (newComment.trim()) {
@@ -61,19 +60,20 @@ const SinglePostModal = ({ show, handleClose, post }) => {
         setNewComment('');
         fetchComments();
       } catch (error) {
-        // Handle error if needed
+        console.error("Failed to add comment:", error); // Log any errors
       }
     }
   };
 
-  // const imageUrl = post?.image ? `${BASE_URL}${post.image}` : null;
   const constructImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
-    console.log("imagePath-----------------------", imagePath);
+    console.log("imagePath:", imagePath); // Log image path
     return `${BASE_URL}${imagePath}`;
   };
+
   const imageUrl = constructImageUrl(post?.image);
+
   return (
     <>
       <Modal

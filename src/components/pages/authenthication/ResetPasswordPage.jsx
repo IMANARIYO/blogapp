@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import api from "../../../services/api";
 import { useForm } from "react-hook-form";
+
+import { apiPromise}from "../../../services/api";
 
 const ResetPasswordPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -9,6 +10,7 @@ const ResetPasswordPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      const api = await apiPromise;
       await api.post('/auth/reset', data);
       setSuccess('Password reset successful');
       setError('');

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import api, { apiMultipart } from "../../../services/api";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { apiMultipartPromise, apiPromise } from "../../../services/api";
 import { POST_CATEGORIES } from "../../../services/postService";
 
 const EditPostPage = ({ show, onClose, post }) => {
@@ -17,7 +17,7 @@ const EditPostPage = ({ show, onClose, post }) => {
         if (post.id) {
             const fetchPost = async () => {
                 try {
-                    const response = await api.get(`/posts/${post.id}`);
+                    const response = await apiPromise.get(`/posts/${post.id}`);
                     setTitle(response.data.title);
                     setContent(response.data.content);
                     setCategory(response.data.category);
@@ -42,6 +42,7 @@ const EditPostPage = ({ show, onClose, post }) => {
         if (image) formData.append('image', image);
 
         try {
+            const apiMultipart = await apiMultipartPromise;
             await apiMultipart.put(`/posts/${post.id}`, formData);
             alert('Post updated successfully!');
             onClose(); // Close the modal

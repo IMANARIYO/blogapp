@@ -1,9 +1,10 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { useState } from "react";
-import api from "../../../services/api";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { getLastDefaultUser } from "../../../services/constants/users";
+
+import { apiPromise}from "../../../services/api";
 
 import {
   Avatar,
@@ -26,6 +27,7 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      const api = await apiPromise;
       const response = await api.post('/auth/login', data);
       const { access_token, user,role } = response.data;
       localStorage.setItem('token', access_token);

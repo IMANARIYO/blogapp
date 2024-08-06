@@ -1,8 +1,9 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { useState } from "react";
-import api from "../../../services/api";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+
+import { apiPromise}from "../../../services/api";
 
 import {
   Box,
@@ -24,6 +25,7 @@ const ForgetPasswordPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      const api = await apiPromise;
       await api.post('/auth/forget', data);
       setSuccess('OTP sent to your email');
       setError('');

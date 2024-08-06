@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddPostPage from "./components/pages/postspages/AddPostPage";
 import AdminDashboard from "./components/pages/dashboardpages/AdminDashoard";
-import AdminDashoard from "./components/pages/dashboardpages/AdminDashoard";
 import AuthorsPage from "./components/pages/authors/AuthorsPage";
 import Dashboard from "./components/pages/dashboardpages/UserDashboard";
 import EditPostPage from "./components/pages/postspages/EditPostPage";

@@ -5,7 +5,7 @@ import { getAllUsers } from "../../../services/userService";
 
 const AuthorsPage = () => {
   const [authors, setAuthors] =  useState(default_users);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {

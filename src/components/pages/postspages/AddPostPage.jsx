@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Container, CssBaseline, MenuItem, Paper, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { apiMultipart } from "../../../services/api";
-import { POST_CATEGORIES } from "../../../services/postService";
+import { apiMultipartPromise } from "../../../services/api";
+import { POST_CATEGORIES, getAllPosts } from "../../../services/postService";
 
 const AddPostPage = ({ onClose }) => {
     const [title, setTitle] = useState('');
@@ -20,8 +20,9 @@ const AddPostPage = ({ onClose }) => {
         if (image) formData.append('image', image);
 
         try {
+            const apiMultipart = await apiMultipartPromise;
             await apiMultipart.post('/posts', formData);
-          
+            getAllPosts();
             navigate('/'); // Redirect to home page or another appropriate page
         } catch (error) {
             console.error('Error adding post:', error);

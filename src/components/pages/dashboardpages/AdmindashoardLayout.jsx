@@ -63,17 +63,6 @@ const AdminDashboardLayout = () => {
           position: 'relative'
         }}
       >
-        <IconButton
-          onClick={handleSidebarToggle}
-          style={{
-            position: 'absolute',
-            top: 20,
-            right: 10,
-            zIndex: 10
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
         <Avatar
           src="/path/to/profile.jpg"
           alt="Profile"
@@ -134,7 +123,10 @@ const AdminDashboardLayout = () => {
 
       {/* Main Content */}
       <div style={{ flex: 1, padding: 20 }}>
-        <Paper style={{ padding: 20, marginBottom: 20 }}>
+        <Paper style={{ padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center' }}>
+          <IconButton onClick={handleSidebarToggle} style={{ marginRight: 20 }}>
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h4" gutterBottom>
             Admin Dashboard
           </Typography>

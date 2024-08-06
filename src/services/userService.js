@@ -11,11 +11,12 @@ export const getUserFromLocalStorage = () => {
   };
   
 
-  import api, { apiMultipart } from './api'; // Adjust the path as needed
+  import {  apiPromise, apiMultipartPromise} from './api'; // Adjust the path as needed
 
 // Get all users
 export const getAllUsers = async () => {
   try {
+    const api = await apiPromise; // Await the promise to get the API instance
     const response = await api.get('/auth/getAllUsers');
     console.log(response.data);
     return response.data;
@@ -44,6 +45,7 @@ export const getUserId = () => {
 // Get user by ID
 export const getUserById = async (userId) => {
   try {
+    const api = await apiPromise; 
     const response = await api.get(`/users/${userId}`);
     return response.data;
   } catch (error) {
@@ -54,6 +56,7 @@ export const getUserById = async (userId) => {
 
 // Delete user by ID
 export const deleteUserById = async (userId) => {
+  const api = await apiPromise; 
   try {
     const response = await api.delete(`/users/${userId}`);
     return response.data;
@@ -65,7 +68,7 @@ export const deleteUserById = async (userId) => {
 
 // Update user profile
 export const updateUserById = async (userId, userData, profilePicture) => {
-  try {
+  try {const apiMultipart = await apiMultipartPromise;
     const formData = new FormData();
     formData.append('profilePicture', profilePicture);
     for (const key in userData) {
@@ -85,6 +88,7 @@ export const updateUserById = async (userId, userData, profilePicture) => {
 // Add admin role
 export const addAdmin = async (userId) => {
   try {
+    const api = await apiPromise; 
     const response = await api.patch(`auth/addadminbyid/${userId}`);
     return response.data;
   } catch (error) {
@@ -96,6 +100,7 @@ export const addAdmin = async (userId) => {
 // Remove admin role
 export const removeAdmin = async (userId) => {
   try {
+    const api = await apiPromise; 
     const response = await api.patch(`/auth/maketheadminasuser/${userId}`);
     return response.data;
   } catch (error) {
@@ -106,7 +111,7 @@ export const removeAdmin = async (userId) => {
 
 // Change password
 export const changePassword = async (currentPassword, newPassword) => {
-  try {
+  try { const api = await apiPromise; 
     const response = await api.post('/users/change-password', { currentPassword, newPassword });
     return response.data;
   } catch (error) {
@@ -118,6 +123,7 @@ export const changePassword = async (currentPassword, newPassword) => {
 // Generate and send OTP
 export const generateAndSendOTP = async (email) => {
   try {
+    const api = await apiPromise; 
     const response = await api.post('/users/generate-otp', { email });
     return response.data;
   } catch (error) {
@@ -129,6 +135,7 @@ export const generateAndSendOTP = async (email) => {
 // Verify OTP and update password
 export const verifyOTPAndUpdatePassword = async (email, otp, newPassword) => {
   try {
+    const api = await apiPromise; 
     const response = await api.post('/users/verify-otp', { email, otp, newPassword });
     return response.data;
   } catch (error) {

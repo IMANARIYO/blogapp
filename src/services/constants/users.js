@@ -171,7 +171,7 @@ export const default_users =  [
       "username": "admin",
       "email": "admin@example.com",
       "profilePicture": "/media/car-8647797_1280.jpg",
-      "password": "$2b$04$Q.jfvdxqldJOSvbcWvL0Ge8azm7kBsIwIoaCySPGz134J5xe2F3qm",
+      "password": "adimn",
       "gender": "male",
       "role": "admin",
       "otpExpiresAt": null,
