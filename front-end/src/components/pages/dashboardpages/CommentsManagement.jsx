@@ -1,27 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, TextareaAutosize } from "@mui/material";
+import SinglePostModal from "../postspages/SinglePostModal";
+import api, { serverurl } from "../../../services/api";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextareaAutosize } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
+import { getPostById } from "../../../services/postService";
+import { getUserId, getUserRole } from "../../../services/userService";
 
 import {
   deleteCommentById,
   getCommentsForPost,
   addCommentToPost,
   updateCommentById,
+  getAllComments,
 } from "../../../services/commentsService";
+
+const BASE_URL = serverurl || '';
 
 const CommentsManagement = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [editComment, setEditComment] = useState(null);
   const [newCommentContent, setNewCommentContent] = useState("");
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
-    fetchComments();
-  }, [postId]);
+    const fetchRoleAndComments = async () => {
+      const userRole = getUserRole();
+      setRole(userRole);
 
-  const fetchComments = async () => {
+      if (userRole === 'user' && !postId===0) {
+        console.log
+        await fetchCommentsForUserPosts();
+      } 
+      // else if (postId) {
+      //   await fetchCommentsForPost(postId);
+      // } 
+      else {
+        await fetchAllComments();
+      }
+    };
+
+    fetchRoleAndComments();
+  }, [ role]);
+
+  // const fetchCommentsForPost = async (postId) => {
+  //   try {
+  //     const data = await getCommentsForPost(postId);
+  //     setComments(data);
+  //   } catch (error) {
+  //     toast.error("Error fetching comments: " + error.message);
+  //   }
+  // };
+
+  const fetchCommentsForUserPosts = async () => {
+    const userId = getUserId();
     try {
-      const data = await getCommentsForPost(postId);
+      const data = await api.get(`/comments/users/${userId}/posts/comments`);
+      setComments(data);
+    } catch (error) {
+      toast.error("Error fetching comments: " + error.message);
+    }
+  };
+
+  const fetchAllComments = async () => {
+    try {
+      const data = await getAllComments();
       setComments(data);
     } catch (error) {
       toast.error("Error fetching comments: " + error.message);
@@ -31,7 +76,11 @@ const CommentsManagement = ({ postId }) => {
   const handleDelete = async (id) => {
     try {
       await deleteCommentById(id);
-      fetchComments(); // Refresh the list after deletion
+      if (postId) {
+        fetchCommentsForPost(postId);
+      } else {
+        fetchAllComments();
+      }
     } catch (error) {
       toast.error("Error deleting comment: " + error.message);
     }
@@ -45,7 +94,11 @@ const CommentsManagement = ({ postId }) => {
     try {
       await updateCommentById(editComment.id, editComment.content);
       setEditComment(null);
-      fetchComments();
+      if (postId) {
+        fetchCommentsForPost(postId);
+      } else {
+        fetchAllComments();
+      }
     } catch (error) {
       toast.error("Error updating comment: " + error.message);
     }
@@ -53,18 +106,79 @@ const CommentsManagement = ({ postId }) => {
 
   const handleAddComment = async () => {
     try {
-      await addCommentToPost(postId, newCommentContent);
+      if (postId) {
+        await addCommentToPost(postId, newCommentContent);
+      }
       setNewCommentContent("");
-      fetchComments();
+      if (postId) {
+        fetchCommentsForPost(postId);
+      } else {
+        fetchAllComments();
+      }
     } catch (error) {
       toast.error("Error adding comment: " + error.message);
     }
   };
 
+  const handleViewDetails = async (postId) => {
+    try {
+      const fetchedPost = await getPostById(postId);
+      setSelectedPost(fetchedPost);
+      setModalOpen(true);
+    } catch (error) {
+      toast.error('Error fetching post details: ' + error.message);
+    }
+  };
+
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "content", headerName: "Content", width: 300 },
-    { field: "postId", headerName: "Post ID", width: 150 },
+    {
+      field: "content",
+      headerName: "Content",
+      width: 300,
+      renderCell: (params) => (
+        <div style={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {params.value}
+        </div>
+      )
+    },
+    {
+      field: "post",
+      headerName: "Post Title",
+      width: 200,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleViewDetails(params.row.postId)}
+        >
+          {params.row.postTitle || "View Post"}
+        </Button>
+      )
+    },
+    {
+      field: "user",
+      headerName: "User",
+      width: 200,
+      renderCell: (params) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src={params.value?.profilePicture ? `${BASE_URL}${params.value.profilePicture}` : 'https://via.placeholder.com/50'}
+            alt={params.value?.fullNames || 'User'}
+            style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }}
+          />
+          {params.value?.fullNames || 'Anonymous'}
+        </div>
+      )
+    },
+    {
+      field: "createdAt",
+      headerName: "Creation Date",
+      width: 200,
+      renderCell: (params) => (
+        new Date(params.value).toLocaleDateString() + " " + new Date(params.value).toLocaleTimeString()
+      )
+    },
     {
       field: "actions",
       headerName: "Actions",
@@ -91,7 +205,7 @@ const CommentsManagement = ({ postId }) => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 700, width: "100%" }}>
       <Button
         variant="contained"
         color="primary"
@@ -133,6 +247,13 @@ const CommentsManagement = ({ postId }) => {
             </Button>
           </DialogActions>
         </Dialog>
+      )}
+      {selectedPost && (
+        <SinglePostModal
+          show={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          post={selectedPost}
+        />
       )}
     </div>
   );

@@ -9,16 +9,16 @@ const Navbar = ({ onLogout }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Function to fetch user from localStorage
+  // Fetch user from localStorage
   const fetchUser = () => {
     const user = getUserFromLocalStorage();
     setUser(user);
   };
 
-  // Fetch user on component mount
   useEffect(() => {
     fetchUser();
 
+    // Close mobile menu if clicked outside
     const handleClickOutside = (event) => {
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         setIsMobileMenuOpen(false);
@@ -27,44 +27,45 @@ const Navbar = ({ onLogout }) => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []); // Empty dependency array ensures this only runs on mount
+  }, []);
 
-  // Function to handle logout
+  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    setUser(null); // Clear the user state
-    navigate('/login'); // Redirect to login page after logout
-    onLogout(); // Call parent onLogout if needed
+    setUser(null);
+    navigate('/login');
+    onLogout();
   };
 
-  // Function to handle login
-  const handleLogin = () => {
-    fetchUser(); // Refresh user state after login
+  // Toggle mobile menu visibility
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(prev => !prev);
+  };
+
+  // Close mobile menu after navigation
+  const handleMenuClick = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <nav className="bg-gray-200 p-2 flex items-center justify-between rounded-md shadow-md fixed left-0 right-0 z-50">
+    <nav className="bg-gray-800 p-2 flex items-center justify-between rounded-md shadow-md fixed left-0 right-0 z-50">
       {/* Logo */}
       <div className="flex items-center space-x-4">
         <Link to="/" className="flex items-center">
           <img src={logo} alt="Logo" className="h-12 w-12 rounded-full border border-gray-600" />
-          {/* Uncomment the line below if you want to show text alongside the logo */}
-          {/* <span className="text-2xl font-bold ml-2 text-gray-900">BlogApp</span> */}
         </Link>
       </div>
 
       {/* Desktop Navigation Links */}
       <div className="hidden md:flex items-center space-x-6">
-        <Link to="/" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Home</Link>
-        <Link to="/authors" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Authors</Link>
-        <Link to="/AdminDashoard" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">AdminDashoard</Link>
+        <Link to="/" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Home</Link>
+        <Link to="/authors" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Authors</Link>
+        <Link to="/admin-dashboard" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Admin Dashboard</Link>
         {user ? (
           <>
-            <Link to="/dashboard" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">dashboard</Link>
-            <Link to="/create-post" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Create Post</Link>
-           
-           
+            <Link to="/dashboard" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Dashboard</Link>
+            <Link to="/create-post" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Create Post</Link>
             <button 
               onClick={handleLogout} 
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors text-lg focus:outline-none"
@@ -74,8 +75,8 @@ const Navbar = ({ onLogout }) => {
           </>
         ) : (
           <>
-            <Link to="/login" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Login</Link>
-            <Link to="/signup" className="text-gray-800 text-lg hover:text-blue-600 transition-colors no-underline">Signup</Link>
+            <Link to="/login" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Login</Link>
+            <Link to="/signup" className="text-white text-lg hover:text-blue-400 transition-colors no-underline">Signup</Link>
           </>
         )}
       </div>
@@ -83,8 +84,9 @@ const Navbar = ({ onLogout }) => {
       {/* Mobile Menu Button */}
       <div className="md:hidden flex items-center">
         <button
-          className="text-gray-800 hover:text-blue-600 focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+          className="text-white hover:text-blue-400 focus:outline-none"
+          onClick={toggleMobileMenu}
         >
           <svg
             className="w-6 h-6"
@@ -107,15 +109,15 @@ const Navbar = ({ onLogout }) => {
       {isMobileMenuOpen && (
         <div ref={mobileMenuRef} className="md:hidden absolute top-16 right-4 bg-gray-800 text-white w-48 rounded-md shadow-lg z-50">
           <div className="flex flex-col p-2 space-y-2">
-            <Link to="/" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Home</Link>
+            <Link to="/" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Home</Link>
             {user ? (
               <>
-                <Link to="/create-post" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Create Post</Link>
-                <Link to="/authors" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Authors</Link>
+                <Link to="/create-post" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Create Post</Link>
+                <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
                 <button 
                   onClick={() => {
                     handleLogout();
-                    handleMenuClick(); // Close menu after logout
+                    handleMenuClick();
                   }} 
                   className="block px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-lg"
                 >
@@ -124,9 +126,9 @@ const Navbar = ({ onLogout }) => {
               </>
             ) : (
               <>
-                <Link to="/login" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Login</Link>
-                <Link to="/signup" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Signup</Link>
-                <Link to="/authors" onClick={() => { handleMenuClick(); }} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded no-underline text-lg">Authors</Link>
+                <Link to="/login" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Login</Link>
+                <Link to="/signup" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Signup</Link>
+                <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
               </>
             )}
           </div>

@@ -1,85 +1,118 @@
+import AddPostModel from "../postspages/AddPostModel";
+import AddPostPage from "../postspages/AddPostPage";
+import EditPostPage from "../postspages/EditPostPage";
 import React, { useEffect, useState } from "react";
+import SinglePostModal from "../postspages/SinglePostModal";
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { deletePostById, getAllPosts } from "../../../services/postService";
 import { getUserFromLocalStorage } from "../../../services/userService";
 
 const PostsManagement = () => {
   const [posts, setPosts] = useState([]);
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
-  const user = getUserFromLocalStorage(); // Get user from localStorage
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [addPostOpen, setAddPostOpen] = useState(false);
+  const [editPostOpen, setEditPostOpen] = useState(false);
+  const [viewPostDetailsOpen, setViewPostDetailsOpen] = useState(false);
+  const user = getUserFromLocalStorage();
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+      const fetchPosts = async () => {
+          try {
+              const data = await getAllPosts();
+              const filteredPosts = user.role === 'admin' ? data : data.filter(post => post.authorId === user.id);
+              setPosts(filteredPosts);
+          } catch (error) {
+              console.error('Failed to fetch posts:', error);
+              toast.error('Failed to load posts.');
+          }
+      };
+      fetchPosts();
+  }, [user.role, user.id]);
 
-  const fetchPosts = async () => {
-    try {
-      const data = await getAllPosts();
-      // Filter posts based on user role
-      const filteredPosts = user.role === 'admin' ? data : data.filter(post => post.authorId === user.id);
-      setPosts(filteredPosts);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
+  const handleDeletePost = async (postId) => {
+      try {
+          await deletePostById(postId);
+          setPosts(posts.filter(post => post.id !== postId));
+          // toast.success('Post deleted successfully!');
+      } catch (error) {
+          console.error('Failed to delete post:', error);
+          toast.error('Failed to delete post.');
+      }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deletePostById(id);
-      fetchPosts(); // Refresh the list after deletion
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
+  const handleViewDetails = (post) => {
+      setSelectedPost(post);
+      setViewPostDetailsOpen(true);
   };
-
-  const handleEdit = (id) => {
-    navigate(`/edit-post/${id}`); // Use navigate instead of history.push
+  const handleEditClick = (post) => {
+    setSelectedPost(post);
+    setEditPostOpen(true);
   };
-
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "title", headerName: "Title", width: 150 },
-    { field: "authorId", headerName: "Author ID", width: 150 },
-    { field: "category", headerName: "Category", width: 150 },
-    { field: "content", headerName: "Content", width: 300 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 150,
-      renderCell: (params) => (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleEdit(params.row.id)}
-            style={{ marginRight: "10px" }}
-          >
-            Edit
-          </Button>
-          <Button
+      { field: 'id', headerName: 'ID', width: 90 },
+      { field: 'title', headerName: 'Title', width: 150 },
+      { field: 'category', headerName: 'Category', width: 150 },
+      { field: 'createdAt', headerName: 'createdAt', width: 180 },
+      { field: 'updatedAt', headerName: 'updatedAt', width: 180 },
+      {
+          field: 'actions',
+          headerName: 'Actions',
+          width: 400,
+          renderCell: (params) => (
+              <div>
+                  <Button
+                      onClick={() => handleViewDetails(params.row)}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                      style={{ marginRight: '8px' }}
+                  >
+                      View Details
+                  </Button>
+                  <Button
+                      onClick={() => { handleEditClick(params.row); setEditPostOpen(true); }}
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      style={{ marginRight: '8px' }}
+                  >
+                      Edit it
+                  </Button>
+                  <Button
+            onClick={() => handleDeletePost(params.row.id)}
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row.id)}
+            size="small"
           >
             Delete
           </Button>
-        </>
-      ),
-    },
+              </div>
+          ),
+      },
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={posts}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
-    </div>
+      <div>
+          <Button variant="contained" onClick={() => setAddPostOpen(true)}>Add Post</Button>
+          <div style={{ height: 700, width: '100%' }}>
+              <DataGrid rows={posts} columns={columns} pageSize={10} />
+          </div>
+          {addPostOpen && <AddPostModel show={addPostOpen} handleClose={() => setAddPostOpen(false)} />}
+            
+          {editPostOpen && selectedPost && (
+        <EditPostPage post={selectedPost} show={editPostOpen} onClose={() => setEditPostOpen(false)} />
+      )}
+          {viewPostDetailsOpen && selectedPost && (
+              <SinglePostModal
+                  show={viewPostDetailsOpen}
+                  handleClose={() => setViewPostDetailsOpen(false)}
+                  post={selectedPost}
+              />
+          )}
+      </div>
   );
 };
 

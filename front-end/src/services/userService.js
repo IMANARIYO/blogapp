@@ -25,6 +25,21 @@ export const getAllUsers = async () => {
     throw error;
   }
 };
+export const getUser = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+
+export const getUserRole = () => {
+  const user = getUser();
+  return user ? user.role : null; // Assuming the user object has a 'role' property
+};
+
+export const getUserId = () => {
+  const user = getUser();
+  return user ? user.id : null; // Assuming the user object has an 'id' property
+};
+
 
 // Get user by ID
 export const getUserById = async (userId) => {
@@ -70,7 +85,7 @@ export const updateUserById = async (userId, userData, profilePicture) => {
 // Add admin role
 export const addAdmin = async (userId) => {
   try {
-    const response = await api.post(`/users/${userId}/add-admin`);
+    const response = await api.patch(`auth/addadminbyid/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Error adding admin role:', error);
@@ -81,7 +96,7 @@ export const addAdmin = async (userId) => {
 // Remove admin role
 export const removeAdmin = async (userId) => {
   try {
-    const response = await api.post(`/users/${userId}/remove-admin`);
+    const response = await api.patch(`/auth/maketheadminasuser/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Error removing admin role:', error);

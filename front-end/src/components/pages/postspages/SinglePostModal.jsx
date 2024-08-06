@@ -70,6 +70,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
   const constructImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
+    console.log("imagePath-----------------------", imagePath);
     return `${BASE_URL}${imagePath}`;
   };
   const imageUrl = constructImageUrl(post?.image);

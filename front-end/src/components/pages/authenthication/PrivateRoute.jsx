@@ -1,25 +1,24 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
-import { getUserFromLocalStorage } from "../../../services/userService";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
-// import { getUserFromLocalStorage } from "../../../services/userService";
+const PrivateRoute = ({ allowedRoles=['user', 'admin'] }) => {
 
-const PrivateRoute = ({ children }) => {
-  const user = getUserFromLocalStorage(); // Fetch user from local storage
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role');
+  
+  const navigate = useNavigate();
 
-  if (!user) {
-    // Redirect to login if the user is not authenticated
-    return <Navigate to="/login" />;
+  if (!token) {
+    navigate('/login');
+    return null;
   }
 
-  // Optionally, you can add role-based access control here
-  // if (user.role !== "admin") {
-  //   // Redirect to home if the user is not an admin
-  //   return <Navigate to="/" />;
-  // }
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    navigate('/login');
+    return  navigate('/login');
+  }
 
-  // Render the children (protected content) if the user is authenticated and has the required role
-  return children;
+  return <Outlet />;
 };
 
 export default PrivateRoute;

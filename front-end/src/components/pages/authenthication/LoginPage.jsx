@@ -27,8 +27,9 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       const response = await api.post('/auth/login', data);
-      const { access_token, user } = response.data;
+      const { access_token, user,role } = response.data;
       localStorage.setItem('token', access_token);
+      localStorage.setItem('role', user.role);
       localStorage.setItem('user', JSON.stringify(user)); // Save user info
       setSuccess('Login successful!');
       setError('');

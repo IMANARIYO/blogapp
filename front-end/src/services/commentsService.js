@@ -4,14 +4,25 @@ import { toast } from "react-toastify";
 // Get Comments for a Post
 export const getCommentsForPost = async (postId) => {
   try {
-    const response = await api.get(`/comments/${postId}`);
+    const response = await api
+    .get(`/comments/${postId}`);
     return response.data;
   } catch (error) {
     toast.error('Failed to fetch comments: ' + error.response?.data?.error || error.message);
     throw error;
   }
 };
+export const getAllComments = async () => {
+  try {
 
+    const response = await api.get('/comments'); // Adjust the endpoint based on your API
+ 
+    return response.data;
+  } catch (error) {
+    toast.error('Failed to fetch comments: ' + error.response?.data?.error || error.message);
+    throw error;
+  }
+};
 // Add Comment to a Post
 export const addCommentToPost = async (postId, content) => {
   try {
@@ -20,6 +31,16 @@ export const addCommentToPost = async (postId, content) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to add comment: ' + error.response?.data?.error || error.message);
+    throw error;
+  }
+};
+// Get All Comments for All Posts of a Specific User
+export const getCommentsForUserPosts = async (userId) => {
+  try {
+    const response = await api.get(`/comments/users/${userId}/posts/comments`);
+    return response.data;
+  } catch (error) {
+    toast.error('Failed to fetch comments for user posts: ' + error.response?.data?.error || error.message);
     throw error;
   }
 };

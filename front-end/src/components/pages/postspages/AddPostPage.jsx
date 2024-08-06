@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { apiMultipart } from "../../../services/api";
 import { POST_CATEGORIES } from "../../../services/postService";
 
-const AddPostPage = () => {
+const AddPostPage = ({ onClose }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
@@ -21,7 +21,7 @@ const AddPostPage = () => {
 
         try {
             await apiMultipart.post('/posts', formData);
-            alert('Post added successfully!');
+          
             navigate('/'); // Redirect to home page or another appropriate page
         } catch (error) {
             console.error('Error adding post:', error);

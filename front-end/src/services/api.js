@@ -4,14 +4,15 @@ import axios from "axios";
 const originalServerUrl = 'http://localhost:4444';
 let serverurl = originalServerUrl; // Initially set to originalServerUrl
 
-// Function to check if the server is running
+// Function to check if the server is reachable
 const checkServerStatus = async () => {
   try {
-    await axios.get(`${originalServerUrl}/health-check`); // Adjust endpoint as necessary
-    console.log('Server is running');
+    // Attempt to get a basic resource or just check connectivity
+    await axios.get(`${originalServerUrl}/status`, { timeout: 5000 }); // Add a timeout for better control
+    console.log('Server is reachable');
     return true;
   } catch (error) {
-    console.error('Server is not available', error);
+    console.error('Server is not reachable', error.message);
     return false;
   }
 };
