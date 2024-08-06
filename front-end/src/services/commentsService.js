@@ -9,7 +9,7 @@ export const getCommentsForPost = async (postId) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to fetch comments: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 export const getAllComments = async () => {
@@ -20,7 +20,7 @@ export const getAllComments = async () => {
     return response.data;
   } catch (error) {
     toast.error('Failed to fetch comments: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 // Add Comment to a Post
@@ -31,7 +31,7 @@ export const addCommentToPost = async (postId, content) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to add comment: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 // Get All Comments for All Posts of a Specific User
@@ -41,7 +41,7 @@ export const getCommentsForUserPosts = async (userId) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to fetch comments for user posts: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 
@@ -52,7 +52,7 @@ export const getCommentById = async (commentId) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to fetch comment: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 
@@ -64,7 +64,7 @@ export const updateCommentById = async (commentId, content) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to update comment: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };
 
@@ -76,6 +76,6 @@ export const deleteCommentById = async (commentId) => {
     return response.data;
   } catch (error) {
     toast.error('Failed to delete comment: ' + error.response?.data?.error || error.message);
-    throw error;
+    ;
   }
 };

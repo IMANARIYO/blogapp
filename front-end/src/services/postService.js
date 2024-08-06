@@ -18,8 +18,8 @@ export const getAllPosts = async () => {
     const response = await api.get('/posts');
     return response.data;
   } catch (error) {
-    toast.error('Failed to fetch posts: ' + error.response?.data?.error || error.message);
-    throw error;
+    console.log('Failed to fetch posts: ' + error.response?.data?.error || error.message);
+    ;
   }
 };
 
@@ -46,8 +46,8 @@ export const getPostById = async (postId) => {
     const response = await api.get(`/posts/${postId}`);
     return response.data;
   } catch (error) {
-    toast.error('Failed to fetch post: ' + error.response?.data?.error || error.message);
-    throw error;
+    console.log('Failed to fetch post: ' + error.response?.data?.error || error.message);
+    ;
   }
 };
 
@@ -79,7 +79,7 @@ export const deletePostById = async (postId) => {
     toast.success('Post deleted successfully');
     return response.data;
   } catch (error) {
-    toast.error('Failed to delete post: ' + error.response?.data?.error || error.message);
-    throw error;
+    console.log('Failed to delete post: ' + error.response?.data?.error || error.message);
+    ;
   }
 };
