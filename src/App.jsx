@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/pages/authenthication/PrivateRoute";
 import React, { useState } from "react";
 import SignupPage from "./components/pages/authenthication/SignupPage";
+import UnauthorizedPage from "./UnauthorizedPage";
 import UserDashboard from "./components/pages/dashboardpages/UserDashboard";
 import ViewPostsPage from "./components/pages/postspages/ViewPostsPage";
 import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
@@ -56,7 +57,7 @@ export function App() {
             <Route path="/authors" element={<AuthorsPage />} />
             <Route path="/author" element={<AuthorsPage />} />
        
-            <Route path="/unauthorized" element={<div>Unauthorized</div>} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
           
            {/* Private Routes for all authenticated users */}
            <Route element={<PrivateRoute allowedRoles={['user', 'admin']} />}>

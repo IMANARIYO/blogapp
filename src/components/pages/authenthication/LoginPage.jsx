@@ -29,6 +29,7 @@ const LoginPage = () => {
     try {
       const api = await apiPromise;
       const response = await api.post('/auth/login', data);
+      console.log("response in login is---------------",response);
       const { access_token, user,role } = response.data;
       localStorage.setItem('token', access_token);
       localStorage.setItem('role', user.role);
@@ -39,7 +40,7 @@ const LoginPage = () => {
       navigate('/dashboard'); // Redirect to home page on successful login
       window.location.reload(); // Reload the page
     } catch (err) {
-      console.log(err);
+      console.log("error in login is---------------",err);
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');
         // Check if the default user exists and matches

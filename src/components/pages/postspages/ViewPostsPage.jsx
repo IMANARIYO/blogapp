@@ -9,7 +9,7 @@ import { DEFAULT_POSTS } from "../../../services/constants/posts";
 const POSTS_PER_PAGE = 10
 // Default posts da
 
-const ViewPostsPage = ({ selectedCategory }) => {
+const ViewPostsPage = () => {
   const [posts, setPosts] = useState(DEFAULT_POSTS)
   const [allPosts, setAllPosts] = useState(DEFAULT_POSTS)
   const [modalShow, setModalShow] = useState(false)
@@ -20,14 +20,14 @@ const ViewPostsPage = ({ selectedCategory }) => {
 
   const query = new URLSearchParams(location.search)
   const authorId = query.get('authorId')
-
+  const selectedCategory = query.get('category');
   const fetchAllPosts = async () => {
     setLoading(false)
     try {
       const api = await apiPromise;
       const response = await api.get(`/posts?start=0&limit=${POSTS_PER_PAGE}`)
       const fetchedPosts = response.data
-if(fetchedPosts.length<=0){
+if(fetchedPosts.length>=0){
   setAllPosts(fetchedPosts)
   setPosts(fetchedPosts)
   

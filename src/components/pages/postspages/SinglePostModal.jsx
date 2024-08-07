@@ -41,7 +41,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
         setComments(filteredDefaultComments);
       }
     } catch (error) {
-      setComments(filteredDefaultComments); 
+   
       console.error("Failed to fetch comments:", error); // Log any errors
     }
   };
@@ -78,7 +78,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
   const constructImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
-    console.log("imagePath:", imagePath); // Log image path
+    
     return `${BASE_URL}${imagePath}`;
   };
 

@@ -54,11 +54,11 @@ cd frontend
 npm install
 
 # Create a .env file in the frontend directory and add the following variable
-echo "REACT_APP_API_URL=http://localhost:4444" > .env
+echo "REACT_APP_API_URL=https://blogapp-ampm.onrender.com" > .env
 
 # Start the frontend server
 npm start
 
 # Running the Application
-echo "Backend runs on http://localhost:4444"
+echo "Backend runs on https://blogapp-ampm.onrender.com"
 echo "Frontend runs on http://localhost:3000"
