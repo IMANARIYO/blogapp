@@ -68,7 +68,8 @@ const SinglePostModal = ({ show, handleClose, post }) => {
 
     if (newComment.trim()) {
       try {
-        await addCommentToPost(post.id, newComment);
+        // await addCommentToPost(post.id, newComment);
+        const addedComment = await addCommentToPost(post.id, newComment);
         setNewComment('');
         // Optimistically update the comments and comment count
         setComments(prevComments => [
