@@ -92,6 +92,14 @@ const SignupPage = () => {
                 error={!!errors.email}
                 helperText={errors.email?.message}
               />
+               <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                label="Full Names"
+                id="fullNames"
+                {...register('fullNames')}
+              />
               <TextField
                 variant="outlined"
                 margin="normal"
