@@ -50,7 +50,7 @@ const CommentsManagement = ({ postId }) => {
       const data = await getCommentsForPost(postId);
       setComments(data);
     } catch (error) {
-      toast.error("Error fetching comments: " + error.message);
+      //console.log("error fetching comments: " + error.message);
     }
   };
 
@@ -61,7 +61,7 @@ const CommentsManagement = ({ postId }) => {
       const data = await api.get(`/comments/users/${userId}/posts/comments`);
       setComments(data);
     } catch (error) {
-      toast.error("Error fetching comments: " + error.message);
+      //console.log("error fetching comments: " + error.message);
     }
   };
 
@@ -70,7 +70,7 @@ const CommentsManagement = ({ postId }) => {
       const data = await getAllComments();
       setComments(data);
     } catch (error) {
-      toast.error("Error fetching comments: " + error.message);
+      //console.log("error fetching comments: " + error.message);
     }
   };
 
@@ -83,7 +83,7 @@ const CommentsManagement = ({ postId }) => {
         fetchAllComments();
       }
     } catch (error) {
-      toast.error("Error deleting comment: " + error.message);
+      //console.log("error deleting comment: " + error.message);
     }
   };
 
@@ -101,7 +101,7 @@ const CommentsManagement = ({ postId }) => {
         fetchAllComments();
       }
     } catch (error) {
-      toast.error("Error updating comment: " + error.message);
+      //console.log("error updating comment: " + error.message);
     }
   };
 
@@ -117,7 +117,7 @@ const CommentsManagement = ({ postId }) => {
         fetchAllComments();
       }
     } catch (error) {
-      toast.error("Error adding comment: " + error.message);
+      //console.log("error adding comment: " + error.message);
     }
   };
 
@@ -127,7 +127,7 @@ const CommentsManagement = ({ postId }) => {
       setSelectedPost(fetchedPost);
       setModalOpen(true);
     } catch (error) {
-      toast.error('Error fetching post details: ' + error.message);
+     console.log('Error fetching post details: ' + error.message);
     }
   };
 

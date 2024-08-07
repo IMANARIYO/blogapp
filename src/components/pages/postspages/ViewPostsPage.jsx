@@ -7,7 +7,7 @@ import { apiPromise } from "../../../services/api";
 import { DEFAULT_POSTS } from "../../../services/constants/posts";
 
 const POSTS_PER_PAGE = 10
-// Default posts data
+// Default posts da
 
 const ViewPostsPage = ({ selectedCategory }) => {
   const [posts, setPosts] = useState(DEFAULT_POSTS)
@@ -22,16 +22,23 @@ const ViewPostsPage = ({ selectedCategory }) => {
   const authorId = query.get('authorId')
 
   const fetchAllPosts = async () => {
-    setLoading(true)
+    setLoading(false)
     try {
       const api = await apiPromise;
       const response = await api.get(`/posts?start=0&limit=${POSTS_PER_PAGE}`)
       const fetchedPosts = response.data
-
-      setAllPosts(fetchedPosts)
-      setPosts(fetchedPosts)
+if(fetchedPosts.length<=0){
+  setAllPosts(fetchedPosts)
+  setPosts(fetchedPosts)
+  
+}else{
+  setAllPosts(DEFAULT_POSTS)
+  setPosts(DEFAULT_POSTS)
+}
       setHasMore(fetchedPosts.length === POSTS_PER_PAGE)
     } catch (error) {
+      setAllPosts(DEFAULT_POSTS)
+     setPosts(DEFAULT_POSTS)
       console.error('Error fetching posts:', error)
     } finally {
       setLoading(false)

@@ -3,15 +3,17 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Typography } from "@mui/material";
 import { serverurl } from "../../../services/api";
-import { addCommentToPost, getCommentsForPost } from "../../../services/commentsService";
+import { addCommentToPost, getAllComments, getCommentsForPost } from "../../../services/commentsService";
 import { default_comments } from "../../../services/constants/comments";
 import { getUserFromLocalStorage } from "../../../services/userService";
 
-const BASE_URL = serverurl || ''; // Replace with your actual base URL
+const BASE_URL = serverurl || ''; 
 
 const SinglePostModal = ({ show, handleClose, post }) => {
+  let id= "a";
+  // alert(id);
   const filteredDefaultComments = default_comments.filter(comment => comment.postId === post?.id);
-  const [comments, setComments] = useState(filteredDefaultComments);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [user, setUser] = useState(getUserFromLocalStorage());
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -29,9 +31,17 @@ const SinglePostModal = ({ show, handleClose, post }) => {
 
   const fetchComments = async () => {
     try {
-      const data = await getCommentsForPost(post.id);
-      setComments(data);
+      const data = await getAllComments();
+      
+      
+      if (Array.isArray(data)) {
+        setComments(data);
+      }else{
+        console.log("data:type is------------------------------------------------------------------", typeof(data),data); // Log data
+        setComments(filteredDefaultComments);
+      }
     } catch (error) {
+      setComments(filteredDefaultComments); 
       console.error("Failed to fetch comments:", error); // Log any errors
     }
   };

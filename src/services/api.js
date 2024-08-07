@@ -7,8 +7,9 @@ let serverurl = originalServerUrl; // Initially set to originalServerUrl
 // Function to check if the server is reachable
 const checkServerStatus = async () => {
   try {
-    await axios.get(`${originalServerUrl}/status`, { timeout: 5000 });
+    await axios.get(`${serverurl}/status`, { timeout: 5000 });
     console.log('Server is reachable');
+    s
     return true;
   } catch (error) {
     console.error('Server is not reachable', error.message);

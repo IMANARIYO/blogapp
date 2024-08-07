@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SinglePostModal from "./SinglePostModal";
 import { useNavigate } from "react-router-dom";
 import { serverurl } from "../../../services/api";
@@ -12,6 +12,7 @@ const BASE_URL = serverurl || '';
 
 const PostCard = ({ post, onOpenModal }) => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   // Navigate to posts by category
   const handleCategoryClick = (e) => {
@@ -31,6 +32,13 @@ const PostCard = ({ post, onOpenModal }) => {
     onOpenModal(post);
   };
 
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   return (
     <div className='bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out cursor-pointer p-4 flex flex-col gap-4'>
       {/* Image Section */}
@@ -105,8 +113,8 @@ const PostCard = ({ post, onOpenModal }) => {
       {/* Single Post Modal */}
       <SinglePostModal
         post={post}
-        open={!!post}
-        onClose={() => onOpenModal(null)} // Adjust depending on how you handle modal state
+        show={!post}
+        handleClose={() => onOpenModal(null)} 
       />
     </div>
   );
