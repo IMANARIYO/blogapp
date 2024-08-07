@@ -31,13 +31,15 @@ const SinglePostModal = ({ show, handleClose, post }) => {
 
   const fetchComments = async () => {
     try {
-      const data = await getAllComments();
+      const data = await getCommentsForPost(post.id);
       
       
       if (Array.isArray(data)) {
         setComments(data);
-      }else{
-        console.log("data:type is------------------------------------------------------------------", typeof(data),data); // Log data
+    
+      }
+      else{
+       
         setComments(filteredDefaultComments);
       }
     } catch (error) {

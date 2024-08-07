@@ -5,7 +5,7 @@ import { apiPromise } from "./api";
 export const getCommentsForPost = async (postId) => {
   const api = await apiPromise; // Await the initialized API instance
   try {
-    const response = await api.get(`/comments/${postId}`);
+    const response = await api.get(`/comments/commentsForPost/${postId}`);
     console.log("in here iwas betraying-------------------------------------",response.data);
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ export const getCommentsForPost = async (postId) => {
 export const getAllComments = async () => {
   const api = await apiPromise; // Await the initialized API instance
   try {
-    const response = await api.get('/comments/CommentsForAllPosts'); // Adjust the endpoint based on your API
+    const response = await api.get('/comments/list/CommentsForAllPosts'); // Adjust the endpoint based on your API
     return response.data;
   } catch (error) {
     console.log('Failed to fetch comments: ' + error.response?.data?.error || error.message);
