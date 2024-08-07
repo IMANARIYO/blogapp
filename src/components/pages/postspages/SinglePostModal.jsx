@@ -70,6 +70,16 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       try {
         await addCommentToPost(post.id, newComment);
         setNewComment('');
+        // Optimistically update the comments and comment count
+        setComments(prevComments => [
+          ...prevComments,
+          { 
+            id: addedComment.id, 
+            content: newComment, 
+            createdAt: new Date().toISOString(), 
+            user: { ...user, fullNames: user.fullNames, profilePicture: user.profilePicture } 
+          }
+        ]);
         fetchComments();
       } catch (error) {
         console.error("Failed to add comment:", error); // Log any errors
@@ -167,7 +177,13 @@ const SinglePostModal = ({ show, handleClose, post }) => {
               </h5>
               {comments.length > 0 ? (
                 comments.map(comment => (
-                  <div key={comment.id} className="border border-gray-300 p-3 mb-3 rounded-lg shadow-sm">
+                  <div key={comment.id} className="border border-gray-300 p-3 mb-3 rounded-lg shadow-sm"
+                  style={{ 
+                    maxWidth: '100%', 
+                    overflowX: 'hidden', 
+                    overflowY: 'auto',
+                    wordWrap: 'break-word'
+                  }}>
                     <div className="flex items-start mb-2">
                       <img
                         className="w-10 h-10 rounded-full mr-3 border-2 border-gray-200"
@@ -181,7 +197,10 @@ const SinglePostModal = ({ show, handleClose, post }) => {
                         </span>
                       </div>
                     </div>
-                    <p className="text-gray-700 whitespace-pre-line">{comment.content}</p>
+                    <p className="text-gray-700 whitespace-pre-line"
+                    style={{
+                      wordWrap: 'break-word'
+                    }}>{comment.content}</p>
                   </div>
                 ))
               ) : (
