@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 // Your API base URL
 const originalServerUrl = 'https://blogapp-ampm.onrender.com'
@@ -12,7 +12,7 @@ const checkServerStatus = async () => {
 
     return true
   } catch (error) {
-    console.error('Server is not reachable', error.message)
+    console.log('Server is not reachable', error.message)
     return false
   }
 }
@@ -51,7 +51,7 @@ const initializeApi = async () => {
     response => response,
     error => {
       if (error.response.status === 401) {
-        console.error('Unauthorized request')
+        console.log('Unauthorized request')
       }
       return Promise.reject(error)
     }
@@ -86,7 +86,7 @@ const initializeApiMultipart = async () => {
     response => response,
     error => {
       if (error.response.status === 401) {
-        console.error('Unauthorized request')
+        console.log('Unauthorized request')
       }
       return Promise.reject(error)
     }

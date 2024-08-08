@@ -29,7 +29,7 @@ const PostsManagement = () => {
               : data.filter(post => post.authorId === user.id)
           setPosts(filteredPosts)
         } catch (error) {
-          console.error('Failed to fetch posts:', error)
+          console.log('Failed to fetch posts:', error)
           console.log('Failed to load posts.')
         }
       }
@@ -44,7 +44,7 @@ const PostsManagement = () => {
       setPosts(posts.filter(post => post.id !== postId))
       // toast.success('Post deleted successfully!');
     } catch (error) {
-      console.error('Failed to delete post:', error)
+      console.log('Failed to delete post:', error)
       console.log('Failed to delete post.')
     }
   }

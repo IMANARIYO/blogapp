@@ -27,7 +27,7 @@ const LoginModal = ({ open, handleClose, onLoginSuccess }) => {
       onLoginSuccess(); // Notify parent component of successful login
      
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');
     }

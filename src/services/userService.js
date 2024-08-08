@@ -1,3 +1,5 @@
+import { apiMultipartPromise, apiPromise } from './api'
+
 // services/userService.js
 
 export const getUserFromLocalStorage = () => {
@@ -5,12 +7,10 @@ export const getUserFromLocalStorage = () => {
   try {
     return storedUser ? JSON.parse(storedUser) : null
   } catch (error) {
-    console.error('Error parsing user from localStorage:', error)
+    console.log('Error parsing user from localStorage:', error)
     return null
   }
 }
-
-import { apiPromise, apiMultipartPromise } from './api' // Adjust the path as needed
 
 // Get all users
 export const getAllUsers = async () => {
@@ -20,7 +20,7 @@ export const getAllUsers = async () => {
     console.log(response.data)
     return response.data
   } catch (error) {
-    console.error('Error fetching users:', error)
+    console.log('Error fetching users:', error)
   }
 }
 export const getUser = () => {
@@ -45,7 +45,7 @@ export const getUserById = async userId => {
     const response = await api.get(`/users/${userId}`)
     return response.data
   } catch (error) {
-    console.error('Error fetching user:', error)
+    console.log('Error fetching user:', error)
   }
 }
 
@@ -56,7 +56,7 @@ export const deleteUserById = async userId => {
     const response = await api.delete(`/users/${userId}`)
     return response.data
   } catch (error) {
-    console.error('Error deleting user:', error)
+    console.log('Error deleting user:', error)
   }
 }
 
@@ -75,7 +75,7 @@ export const updateUserById = async (userId, userData, profilePicture) => {
     const response = await apiMultipart.put(`/users/${userId}`, formData)
     return response.data
   } catch (error) {
-    console.error('Error updating user:', error)
+    console.log('Error updating user:', error)
   }
 }
 
@@ -86,7 +86,7 @@ export const addAdmin = async userId => {
     const response = await api.patch(`auth/addadminbyid/${userId}`)
     return response.data
   } catch (error) {
-    console.error('Error adding admin role:', error)
+    console.log('Error adding admin role:', error)
   }
 }
 
@@ -97,7 +97,7 @@ export const removeAdmin = async userId => {
     const response = await api.patch(`/auth/maketheadminasuser/${userId}`)
     return response.data
   } catch (error) {
-    console.error('Error removing admin role:', error)
+    console.log('Error removing admin role:', error)
   }
 }
 
@@ -111,7 +111,7 @@ export const changePassword = async (currentPassword, newPassword) => {
     })
     return response.data
   } catch (error) {
-    console.error('Error changing password:', error)
+    console.log('Error changing password:', error)
   }
 }
 
@@ -122,7 +122,7 @@ export const generateAndSendOTP = async email => {
     const response = await api.post('/users/generate-otp', { email })
     return response.data
   } catch (error) {
-    console.error('Error generating OTP:', error)
+    console.log('Error generating OTP:', error)
   }
 }
 
@@ -137,6 +137,6 @@ export const verifyOTPAndUpdatePassword = async (email, otp, newPassword) => {
     })
     return response.data
   } catch (error) {
-    console.error('Error verifying OTP and updating password:', error)
+    console.log('Error verifying OTP and updating password:', error)
   }
 }

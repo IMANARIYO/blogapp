@@ -10,8 +10,8 @@ const POSTS_PER_PAGE = 10
 // Default posts da
 
 const ViewPostsPage = () => {
-  const [posts, setPosts] = useState(DEFAULT_POSTS)
-  const [allPosts, setAllPosts] = useState(DEFAULT_POSTS)
+  const [posts, setPosts] = useState(Array.isArray(DEFAULT_POSTS) ? DEFAULT_POSTS : []); 
+  const [allPosts, setAllPosts] = useState(Array.isArray(DEFAULT_POSTS) ? DEFAULT_POSTS : []); 
   const [modalShow, setModalShow] = useState(false)
   const [selectedPost, setSelectedPost] = useState(null)
   const [hasMore, setHasMore] = useState(true)
@@ -26,20 +26,21 @@ const ViewPostsPage = () => {
     try {
       const api = await apiPromise;
       const response = await api.get(`/posts?start=0&limit=${POSTS_PER_PAGE}`)
-      const fetchedPosts = response.data
-if(fetchedPosts.length>=0){
+      const fetchedPosts =Array.isArray(response.data) ? response.data : []; 
+if(fetchedPosts.length>0){
   setAllPosts(fetchedPosts)
   setPosts(fetchedPosts)
-  
 }else{
+  
   setAllPosts(DEFAULT_POSTS)
   setPosts(DEFAULT_POSTS)
+  console.log("________________________________________ ")
 }
       setHasMore(fetchedPosts.length === POSTS_PER_PAGE)
     } catch (error) {
+      console.log("No posts fetched, using default posts.",error.message);
       setAllPosts(DEFAULT_POSTS)
      setPosts(DEFAULT_POSTS)
-      console.error('Error fetching posts:', error)
     } finally {
       setLoading(false)
     }

@@ -47,7 +47,7 @@ const UsersManagement = () => {
       setUsers(usersWithCounts);
       toast.success("Users fetched successfully!");
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.log("Error fetching users:", error);
      console.log("Failed to fetch users. Please try again.");
     }
   };
@@ -58,7 +58,7 @@ const UsersManagement = () => {
       fetchUsers(); // Refresh the list after deletion
       toast.success("User deleted successfully!");
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.log("Error deleting user:", error);
      console.log("Failed to delete user. Please try again.");
     }
   };
@@ -75,7 +75,7 @@ const UsersManagement = () => {
       fetchUsers();
       toast.success("User updated successfully!");
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.log("Error updating user:", error);
      console.log("Failed to update user. Please try again.");
     }
   };
@@ -91,7 +91,7 @@ const UsersManagement = () => {
       }
       fetchUsers();
     } catch (error) {
-      console.error(
+      console.log(
         `Error ${action === "add" ? "adding" : "removing"} admin role:`,
         error
       );

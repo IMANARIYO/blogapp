@@ -1,23 +1,21 @@
 import React from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const PrivateRoute = ({ allowedRoles=['user', 'admin'] }) => {
-
+const PrivateRoute = ({ allowedRoles }) => {
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
-  
-  const navigate = useNavigate();
 
   if (!token) {
-    navigate('/login');
-    return null;
+    // Redirect to login if no token is found
+    return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(userRole)) {
-    navigate('/login');
-    return  navigate('/login');
+    // Redirect to login if the user's role is not allowed
+    return <Navigate to="/login" replace />;
   }
 
+  // Render the nested routes
   return <Outlet />;
 };
 

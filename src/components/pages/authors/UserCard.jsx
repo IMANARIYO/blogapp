@@ -9,7 +9,7 @@ const AuthorCard = ({ user }) => {
     if (user && user.id) {
       navigate(`/posts?authorId=${user.id}`); // Navigate to posts with authorId
     } else {
-      console.error("User ID is missing!");
+      console.log("User ID is missing!");
     }
   };
 

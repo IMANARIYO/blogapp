@@ -18,7 +18,7 @@ const PostListPage = () => {
         setPosts(response.data.data)
         setFilteredPosts(response.data.data)
       } catch (error) {
-        console.error('Failed to fetch posts:', error)
+        console.log('Failed to fetch posts:', error)
       } finally {
         setLoading(false)
       }

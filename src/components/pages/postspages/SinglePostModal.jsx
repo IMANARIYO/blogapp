@@ -10,8 +10,7 @@ import { getUserFromLocalStorage } from "../../../services/userService";
 const BASE_URL = serverurl || ''; 
 
 const SinglePostModal = ({ show, handleClose, post }) => {
-  let id= "a";
-  // alert(id);
+
   const filteredDefaultComments = default_comments.filter(comment => comment.postId === post?.id);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -44,7 +43,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       }
     } catch (error) {
    
-      console.error("Failed to fetch comments:", error); // Log any errors
+      console.log("Failed to fetch comments:", error); // Log any errors
     }
   };
 
@@ -69,13 +68,15 @@ const SinglePostModal = ({ show, handleClose, post }) => {
     if (newComment.trim()) {
       try {
         // await addCommentToPost(post.id, newComment);
+        console.log("addiing the comment on the post with the is----------------------------",post.id);
         const addedComment = await addCommentToPost(post.id, newComment);
+        
         setNewComment('');
         // Optimistically update the comments and comment count
         setComments(prevComments => [
           ...prevComments,
           { 
-            id: addedComment.id, 
+            id: comments.length+1, 
             content: newComment, 
             createdAt: new Date().toISOString(), 
             user: { ...user, fullNames: user.fullNames, profilePicture: user.profilePicture } 
@@ -83,7 +84,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
         ]);
         fetchComments();
       } catch (error) {
-        console.error("Failed to add comment:", error); // Log any errors
+        console.log("Failed to add comment:", error); // Log any errors
       }
     }
   };
