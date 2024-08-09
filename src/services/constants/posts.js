@@ -5,7 +5,8 @@ export const getRandomCategory = () => {
   return POST_CATEGORIES[randomIndex];
 };
 
-export const DEFAULT_POSTS =[
+export const DEFAULT_POSTS =[]
+export const DEFAULT_POSTSs =[
   {
     "id": 1,
     "title": "First Postt..",

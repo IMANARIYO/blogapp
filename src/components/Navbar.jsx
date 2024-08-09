@@ -110,8 +110,9 @@ const Navbar = ({ onLogout }) => {
       {isMobileMenuOpen && (
         <div ref={mobileMenuRef} className="md:hidden absolute top-16 right-4 bg-gray-800 text-white w-48 rounded-md shadow-lg z-50">
           <div className="flex flex-col p-2 space-y-2">
+          <Link to="/" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Home</Link>
             <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
-            <Link to="/" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Home</Link>
+      
             {user ? (
               <>
                      <Link to="/dashboard" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Dashboard</Link>
@@ -131,7 +132,7 @@ const Navbar = ({ onLogout }) => {
               <>
                 <Link to="/login" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Login</Link>
                 <Link to="/signup" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Signup</Link>
-                <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link>
+                {/* <Link to="/authors" onClick={handleMenuClick} className="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded text-lg">Authors</Link> */}
               </>
             )}
           </div>

@@ -1,6 +1,6 @@
 import { getRandomCategory } from "./posts";
 
-export const default_comments=[
+export const default_commentss=[
   {
     "id": 1,
     "content": "This is a comment on the first post by user 2.",
@@ -574,3 +574,5 @@ export const default_comments=[
     }
   }
 ]
+
+export const default_comments=[]

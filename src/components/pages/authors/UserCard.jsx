@@ -4,7 +4,10 @@ import { serverurl } from "../../../services/api";
 
 const AuthorCard = ({ user }) => {
   const navigate = useNavigate();
-
+  const getImageUrl = (imagePath) => {
+  
+    return imagePath ? `${BASE_URL}${imagePath}` : 'https://via.placeholder.com/500';
+  };
   const handleClick = () => {
     if (user && user.id) {
       navigate(`/posts?authorId=${user.id}`); // Navigate to posts with authorId
@@ -25,7 +28,7 @@ const AuthorCard = ({ user }) => {
       {/* User Image */}
       <div className="w-16 h-16 overflow-hidden rounded-full">
         <img
-          src={user.profilePicture ? `${user.profilePicture}` : 'https://via.placeholder.com/150'}
+          src={user.profilePicture ? `${serverurl}${user.profilePicture}` : 'https://via.placeholder.com/150'}
           alt={user.fullNames}
           className="w-full h-full object-cover"
         />

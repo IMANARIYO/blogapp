@@ -71,7 +71,7 @@ const PostCard = ({ post, onOpenModal }) => {
           onClick={handleAuthorClick}
         >
           <img
-            src={post.author.profilePicture}
+            src={getImageUrl(post.author.profilePicture)}
             alt={post.author.fullNames}
             className='w-10 h-10 rounded-full mr-3 border-2 border-gray-300'
           />
