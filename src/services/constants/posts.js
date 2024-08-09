@@ -8,7 +8,7 @@ export const getRandomCategory = () => {
 export const DEFAULT_POSTS =[
   {
     "id": 1,
-    "title": "First Post",
+    "title": "First Postt..",
     "content": "This is the content of the first post.",
     "category": "Health",
     "authorId": 1,
@@ -142,7 +142,7 @@ export const DEFAULT_POSTS =[
   },
   {
     "id": 2,
-    "title": "Second Post",
+    "title": "Second Postt..",
     "content": "Content of the second post.",
     "category": "Technology",
     "authorId": 2,

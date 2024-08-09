@@ -34,7 +34,7 @@ if(fetchedPosts.length>0){
   
   setAllPosts(DEFAULT_POSTS)
   setPosts(DEFAULT_POSTS)
-  console.log("________________________________________ ")
+
 }
       setHasMore(fetchedPosts.length === POSTS_PER_PAGE)
     } catch (error) {
@@ -88,7 +88,12 @@ if(fetchedPosts.length>0){
       fetchAllPosts()
     }
   }
-
+  const updateCommentsInPost = (postId, updatedComments) => {
+    const updatedPosts = posts.map(post => 
+      post.id === postId ? { ...post, comments: updatedComments } : post
+    );
+    setPosts(updatedPosts);
+  };
   return (
     <div className='p-4'>
       <h1 className='text-4xl font-bold mb-6 text-gray-800'>
@@ -116,6 +121,7 @@ if(fetchedPosts.length>0){
                 key={post.id}
                 post={post}
                 onOpenModal={() => handleOpenModal(post)}
+                // updateCommentsInPost={updateCommentsInPost}
               />
             )}
           </div>
@@ -127,6 +133,7 @@ if(fetchedPosts.length>0){
           show={modalShow}
           handleClose={handleCloseModal}
           post={selectedPost}
+          updateCommentsInPost={updateCommentsInPost}
         />}
     </div>
   )

@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { serverurl } from "../../../services/api";
 
 // Function to get image URL with a fallback placeholder
+const BASE_URL = serverurl;
 const getImageUrl = (imagePath) => {
+
   return imagePath ? `${BASE_URL}${imagePath}` : 'https://via.placeholder.com/500';
 };
 
-const BASE_URL = serverurl || '';
 
 const PostCard = ({ post, onOpenModal }) => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const PostCard = ({ post, onOpenModal }) => {
           onClick={handleAuthorClick}
         >
           <img
-            src={getImageUrl(post.author.profilePicture)}
+            src={post.author.profilePicture}
             alt={post.author.fullNames}
             className='w-10 h-10 rounded-full mr-3 border-2 border-gray-300'
           />
@@ -103,7 +104,10 @@ const PostCard = ({ post, onOpenModal }) => {
         </div>
 
         <button
-          onClick={handleViewPostClick}
+          // onClick={handleViewPostClick}
+          size='small'
+          color='primary'
+          onClick={() => onOpenModal(post)}
           className='bg-blue-600 text-white py-1 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
         >
           View Post
@@ -111,11 +115,11 @@ const PostCard = ({ post, onOpenModal }) => {
       </div>
 
       {/* Single Post Modal */}
-      <SinglePostModal
+      {/* <SinglePostModal
         post={post}
         show={!post}
         handleClose={() => onOpenModal(null)} 
-      />
+      /> */}
     </div>
   );
 };

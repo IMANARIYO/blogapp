@@ -7,9 +7,9 @@ import { addCommentToPost, getAllComments, getCommentsForPost } from "../../../s
 import { default_comments } from "../../../services/constants/comments";
 import { getUserFromLocalStorage } from "../../../services/userService";
 
-const BASE_URL = serverurl || ''; 
+const BASE_URL = serverurl ; 
 
-const SinglePostModal = ({ show, handleClose, post }) => {
+const SinglePostModal = ({ show, handleClose, post,updateCommentsInPost  }) => {
 
   const filteredDefaultComments = default_comments.filter(comment => comment.postId === post?.id);
   const [comments, setComments] = useState([]);
@@ -21,7 +21,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
     if (post && show) {
       fetchComments();
     }
-  }, [post, show]); // Dependency array includes post and show
+  }, [post, show]); 
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -43,7 +43,7 @@ const SinglePostModal = ({ show, handleClose, post }) => {
       }
     } catch (error) {
    
-      console.log("Failed to fetch comments:", error); // Log any errors
+      console.log("Failed to fetch comments:", error); 
     }
   };
 
@@ -67,21 +67,20 @@ const SinglePostModal = ({ show, handleClose, post }) => {
 
     if (newComment.trim()) {
       try {
-        // await addCommentToPost(post.id, newComment);
-        console.log("addiing the comment on the post with the is----------------------------",post.id);
+      
         const addedComment = await addCommentToPost(post.id, newComment);
         
         setNewComment('');
         // Optimistically update the comments and comment count
-        setComments(prevComments => [
-          ...prevComments,
-          { 
-            id: comments.length+1, 
-            content: newComment, 
-            createdAt: new Date().toISOString(), 
-            user: { ...user, fullNames: user.fullNames, profilePicture: user.profilePicture } 
-          }
-        ]);
+        const updatedComments = [...comments, {
+          id: addedComment.id,
+          content: newComment,
+          createdAt: new Date().toISOString(),
+          user: { ...user, fullNames: user.fullNames, profilePicture: user.profilePicture }
+        }];
+        setComments(updatedComments);
+        updateCommentsInPost(post.id, updatedComments); 
+        setNewComment('');
         fetchComments();
       } catch (error) {
         console.log("Failed to add comment:", error); // Log any errors
@@ -92,9 +91,10 @@ const SinglePostModal = ({ show, handleClose, post }) => {
   const constructImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
-    
+console.log("imagePath now is",imagePath);
     return `${BASE_URL}${imagePath}`;
   };
+
 
   const imageUrl = constructImageUrl(post?.image);
 

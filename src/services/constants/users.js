@@ -86,7 +86,8 @@ export const defaultUser = {
 
 const defaultUsers = [defaultUser];
 
-export const default_users =  [
+export const default_users = []
+export const default_userss =  [
     {
       "id": 2,
       "fullNames": "User Full Name",

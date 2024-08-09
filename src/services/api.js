@@ -2,16 +2,16 @@ import axios from "axios";
 
 // Your API base URL
 const originalServerUrl = 'https://blogapp-ampm.onrender.com'
-let serverurl = originalServerUrl // Initially set to originalServerUrl
-
+let serverurl = originalServerUrl;
 // Function to check if the server is reachable
 const checkServerStatus = async () => {
   try {
     await axios.get(`${serverurl}/status`, { timeout: 5000 })
     console.log('Server is reachable')
-
+    serverurl=originalServerUrl;
     return true
   } catch (error) {
+    
     console.log('Server is not reachable', error.message)
     return false
   }
@@ -23,6 +23,7 @@ const updateServerUrl = async () => {
   if (!serverIsRunning) {
     serverurl = ''
   }
+  serverurl=originalServerUrl;
 }
 
 // Initialize and export the API instance
