@@ -4,6 +4,7 @@ import CommentsManagement from "./CommentsManagement";
 import DashboardSummary from "./DashboardSummary";
 import PostsManagement from "./PostsManagement";
 import React from "react";
+import UserProfile from "./UserProfile";
 import UsersManagement from "./UsersManagement";
 import { Button, Typography } from "@mui/material";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
@@ -17,8 +18,8 @@ const AdminDashboard = () => {
         <Route path="manage-posts" element={<PostsManagement />} />
         <Route path="manage-users" element={<UsersManagement />} />
         <Route path="manage-users/addpost" element={<AddPostPage />} />
-
-        {/* Add more routes here */}
+        <Route path="profile" element={<UserProfile />} />
+       
       </Route>
     </Routes>
   );

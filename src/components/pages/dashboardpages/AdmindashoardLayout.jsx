@@ -24,7 +24,9 @@ import {
   Menu,
   MenuItem,
   Paper,
-  Typography
+  Typography,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 
 const AdminDashboardLayout = () => {
@@ -32,6 +34,8 @@ const AdminDashboardLayout = () => {
   const [open, setOpen] = React.useState(true);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -52,35 +56,22 @@ const AdminDashboardLayout = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} h-screen`}>
       {/* Sidebar */}
       <div
-        style={{
-          width: open ? 250 : 60,
-          backgroundColor: '#f4f4f4',
-          padding: 20,
-          transition: 'width 0.3s',
-          position: 'relative'
-        }}
+        className={`${
+          open ? 'w-64' : 'w-16'
+        } bg-gray-100 p-5 transition-width duration-300 relative overflow-auto`}
       >
         <Avatar
           src="/path/to/profile.jpg"
           alt="Profile"
-          style={{
-            width: 60,
-            height: 60,
-            marginBottom: 20,
-            cursor: 'pointer'
-          }}
+          className="w-16 h-16 mb-5 cursor-pointer"
           onClick={handleProfileMenuOpen}
         />
         <Typography
           variant="h6"
-          style={{
-            textAlign: 'center',
-            marginBottom: 20,
-            display: open ? 'block' : 'none'
-          }}
+          className={`text-center mb-5 ${open ? 'block' : 'hidden'}`}
         >
           Admin
         </Typography>
@@ -88,27 +79,27 @@ const AdminDashboardLayout = () => {
           <List>
             <ListItem button component={Link} to="/admin-dashboard" selected={isActive('/admin-dashboard')}>
               <ListItemIcon><Home /></ListItemIcon>
-              <ListItemText primary="Dashboard" style={{ display: open ? 'block' : 'none' }} />
+              <ListItemText primary="Dashboard" className={`${open ? 'block' : 'hidden'}`} />
             </ListItem>
             <ListItem button component={Link} to="/admin-dashboard/manage-comments" selected={isActive('/admin-dashboard/manage-comments')}>
               <ListItemIcon><Comment /></ListItemIcon>
-              <ListItemText primary="Manage Comments" style={{ display: open ? 'block' : 'none' }} />
+              <ListItemText primary="Manage Comments" className={`${open ? 'block' : 'hidden'}`} />
             </ListItem>
             <ListItem button component={Link} to="/admin-dashboard/manage-posts" selected={isActive('/admin-dashboard/manage-posts')}>
               <ListItemIcon><PostAdd /></ListItemIcon>
-              <ListItemText primary="Manage Posts" style={{ display: open ? 'block' : 'none' }} />
+              <ListItemText primary="Manage Posts" className={`${open ? 'block' : 'hidden'}`} />
             </ListItem>
             <ListItem button component={Link} to="/admin-dashboard/manage-users" selected={isActive('/admin-dashboard/manage-users')}>
               <ListItemIcon><People /></ListItemIcon>
-              <ListItemText primary="Manage Users" style={{ display: open ? 'block' : 'none' }} />
+              <ListItemText primary="Manage Users" className={`${open ? 'block' : 'hidden'}`} />
             </ListItem>
             <ListItem button onClick={handleSettingsToggle}>
               <ListItemIcon><Settings /></ListItemIcon>
-              <ListItemText primary="Settings" style={{ display: open ? 'block' : 'none' }} />
+              <ListItemText primary="Settings" className={`${open ? 'block' : 'hidden'}`} />
               {settingsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             {settingsOpen && (
-              <div style={{ paddingLeft: 20 }}>
+              <div className="pl-5">
                 <ListItem button component={Link} to="/admin-dashboard/settings/general" selected={isActive('/admin-dashboard/settings/general')}>
                   <ListItemText primary="General Settings" />
                 </ListItem>
@@ -122,11 +113,13 @@ const AdminDashboardLayout = () => {
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: 20 }}>
-        <Paper style={{ padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center' }}>
-          <IconButton onClick={handleSidebarToggle} style={{ marginRight: 20 }}>
-            <MenuIcon />
-          </IconButton>
+      <div className="flex-1 p-5 flex flex-col">
+        <Paper className="p-5 mb-5 flex items-center">
+          {isMobile && (
+            <IconButton onClick={handleSidebarToggle} className="mr-5">
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="h4" gutterBottom>
             Admin Dashboard
           </Typography>
@@ -141,16 +134,20 @@ const AdminDashboardLayout = () => {
         onClose={handleProfileMenuClose}
       >
         <MenuItem onClick={handleProfileMenuClose} component={Link} to="/admin-dashboard/profile">
-          <Avatar src="/path/to/profile.jpg" style={{ width: 40, height: 40, marginRight: 10 }} />
+          <Avatar src="/path/to/profile.jpg" className="w-10 h-10 mr-2.5" />
           Profile
+        </MenuItem>
+        <MenuItem onClick={handleProfileMenuClose} component={Link} to="/admin-dashboard/profile/edit">
+          <Settings className="mr-2.5" />
+          Edit Profile
+        </MenuItem>
+        <MenuItem onClick={handleProfileMenuClose} component={Link} to="/admin-dashboard/profile/change-password">
+          <Settings className="mr-2.5" />
+          Change Password
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleProfileMenuClose}>
-          <Settings style={{ marginRight: 10 }} />
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleProfileMenuClose}>
-          <Logout style={{ marginRight: 10 }} />
+          <Logout className="mr-2.5" />
           Logout
         </MenuItem>
       </Menu>

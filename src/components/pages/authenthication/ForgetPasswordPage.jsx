@@ -1,7 +1,7 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { apiPromise}from "../../../services/api";
 
@@ -22,13 +22,17 @@ const ForgetPasswordPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       const api = await apiPromise;
       await api.post('/auth/forget', data);
       setSuccess('OTP sent to your email');
       setError('');
+
+      setTimeout(() => {
+        navigate(`/reset-password?email=${encodeURIComponent(data.email)}`);
+      }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred');
       setSuccess('');

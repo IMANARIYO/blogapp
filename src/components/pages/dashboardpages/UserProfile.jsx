@@ -1,79 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
-import { getUserFromLocalStorage } from "../../../services/userService";
+import React, { useState } from "react";
+import axios from "axios";
+import { Button, TextField } from "@mui/material";
 
 const UserProfile = () => {
-  const [user, setUser] = useState({ name: '', email: '' });
-  const [editing, setEditing] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState({ name: '', email: '' });
+  const [user, setUser] = useState({
+    fullNames: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
+    profilePicture: "",
+  });
 
-  useEffect(() => {
-    const fetchUser = () => {
-      const userData = getUserFromLocalStorage();
-      setUser(userData);
-      setUpdatedUser(userData);
-    };
-    fetchUser();
-  }, []);
-
-  const handleEdit = () => {
-    setEditing(true);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
   };
 
-  const handleSave = async () => {
-    // Implement the update user logic here
-    setUser(updatedUser);
-    setEditing(false);
-  };
-
-  const handleCancel = () => {
-    setEditing(false);
-    setUpdatedUser(user);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put("/api/users/update", user);
+      console.log("Profile updated:", response.data);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   return (
-    <Paper style={{ padding: 20 }}>
-      <Typography variant="h4" gutterBottom>
-        User Profile
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            label="Name"
-            fullWidth
-            value={updatedUser.name}
-            onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
-            disabled={!editing}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            value={updatedUser.email}
-            onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
-            disabled={!editing}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          {editing ? (
-            <div>
-              <Button onClick={handleSave} variant="contained" color="primary" style={{ marginRight: 10 }}>
-                Save
-              </Button>
-              <Button onClick={handleCancel} variant="outlined" color="secondary">
-                Cancel
-              </Button>
-            </div>
-          ) : (
-            <Button onClick={handleEdit} variant="contained" color="primary">
-              Edit Profile
-            </Button>
-          )}
-        </Grid>
-      </Grid>
-    </Paper>
+    <form onSubmit={handleSubmit}>
+      <TextField label="Full Names" name="fullNames" value={user.fullNames} onChange={handleChange} fullWidth />
+      <TextField label="Username" name="username" value={user.username} onChange={handleChange} fullWidth />
+      <TextField label="Email" name="email" value={user.email} onChange={handleChange} fullWidth disabled />
+      <TextField label="Phone Number" name="phoneNumber" value={user.phoneNumber} onChange={handleChange} fullWidth />
+      <Button type="submit" variant="contained" color="primary">Update Profile</Button>
+    </form>
   );
 };
 

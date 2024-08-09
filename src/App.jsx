@@ -10,6 +10,7 @@ import LoginPage from "./components/pages/authenthication/LoginPage";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/pages/authenthication/PrivateRoute";
 import React, { useState } from "react";
+import ResetPasswordPage from "./components/pages/authenthication/ResetPasswordPage";
 import SignupPage from "./components/pages/authenthication/SignupPage";
 import UnauthorizedPage from "./UnauthorizedPage";
 import UserDashboard from "./components/pages/dashboardpages/UserDashboard";
@@ -52,6 +53,8 @@ export function App() {
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/forgot-password" element={<ForgetPasswordPage />} />
+            <Route path="/forget-password" element={<ForgetPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/create-post" element={<AddPostPage />} />
             <Route path="/edit-post/:id" element={<EditPostPage />} />
             <Route path="/authors" element={<AuthorsPage />} />

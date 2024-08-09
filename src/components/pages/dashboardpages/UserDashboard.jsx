@@ -15,6 +15,7 @@ const UserDashboard = () => {
         <Route path="posts" element={<PostsManagement />} />
         <Route path="comments" element={<CommentsManagement />} />
         <Route path="profile" element={<UserProfile />} />
+       
       </Route>
     </Routes>
   );
