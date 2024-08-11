@@ -23,6 +23,17 @@ export const getAllPosts = async () => {
      
   }
 };
+// Get All Posts
+export const getAllMyPosts = async () => {
+  const api = await apiPromise; // Await the initialized API instance
+  try {
+    const response = await api.get('/posts/myposts');
+    return response.data;
+  } catch (error) {
+   console.log('Failed to fetch posts: ' + error.response?.data?.error || error.message);
+     
+  }
+};
 
 // Create Post
 const isValidCategory = (category) => POST_CATEGORIES.includes(category);

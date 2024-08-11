@@ -1,11 +1,10 @@
-# blogapp
 # Blog Application
 
 ## Overview
-This is a simple blog application developed as part of the QT Global Software Developer practical test. The application includes user authentication, blog post management, and commenting functionality.
+This blog application is developed as part of the QT Global Software Developer practical test. It features user authentication, blog post management, and commenting functionality.
 
 ## Technologies Used
-- **Backend**: Node.js, Sequelize, Express.js
+- **Backend**: Node.js, Sequelize, PostgreSQL, Express.js
 - **Frontend**: React.js
 - **Database**: PostgreSQL
 
@@ -17,48 +16,70 @@ This is a simple blog application developed as part of the QT Global Software De
 
 ### Backend Setup
 
-# Navigate to the backend directory
-cd backend
-
-# Install backend dependencies
-npm install
-
-# Create a .env file in the backend directory and add the following variables
-echo "DB_HOST=dpg-cqme1p1u0jms73frbfl0-a.ohio-postgres.render.com
+1. **Navigate to the Backend Directory**
+   ```bash
+   cd backend
+2. **Install Backend Dependencies**
+   ```bash
+   npm install
+   ```
+3. **Create a `.env` file in the backend directory and add your PostgreSQL credentials**
+   ```
+  DB_HOST=dpg-cqme1p1u0jms73frbfl0-a.ohio-postgres.render.com
 DB_PORT=5432
-DB_NAME=neame your db
-DB_USER=username you habve setted
-DB_PASS=ex123
-CLOUD_NAME=yourcloudinary name
-API_KEY=cloudinaryapi
-API_SECRET=the secret  from  cloudinary
-JWT_SECRET=secret to you  in authehtication
-JWT_EXP=time  your want the password token  to expire
-EMAIL_USER=email used as sent from
-EMAIL_PASS=
-server_PORT=4444" > .env
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+CLOUD_NAME=your_cloudinary_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_secret
+JWT_SECRET=your_jwt_secret
+JWT_EXP=your_jwt_token_expiry_time
+EMAIL_USER=your_email_address
+EMAIL_PASS=your_email_password
+SERVER_PORT=4444
 
-# Run migrations and seed the database
-npx sequelize-cli db:migrate
-npx sequelize-cli db:seed:all
+   ```
+4. **Run the Backend Server**
+   ```bash
+   npm run dev
+   ```
 
-# Start the backend server
-npm start
+### Frontend Setup
 
-# Open a new terminal tab or window to set up the frontend
+1. **Navigate to the Frontend Directory**
+   ```bash
+   cd frontend
+   ```
+2. **Install Frontend Dependencies**
+   ```bash
+   npm install
+   ```
 
-# Navigate to the frontend directory
-cd frontend
+3. **Run the Frontend Server**
+   ```bash
+   npm start
+   ```
 
-# Install frontend dependencies
-npm install
+## Features
 
-# Create a .env file in the frontend directory and add the following variable
-echo "REACT_APP_API_URL=https://blogapp-ampm.onrender.com" > .env
+- **User Authentication**: Users can register, log in, and log out.
+- **Blog Post Management**: Users can create, read, update, and delete 
+## Deployment
+## Deployment
 
-# Start the frontend server
-npm start
+- **Backend**: Deployed using Render. For API documentation and deployment instructions, visit the [Render API Docs](https://blogapp-ampm.onrender.com/api-docs).
+- **Frontend**: Deployed on Vercel. You can view the application [here](https://imanariyo-blog-app-deployed-version.vercel.app/).
 
-# Running the Application
-echo "Backend runs on https://blogapp-ampm.onrender.com"
-echo "Frontend runs on http://localhost:3000"
+The application can also be deployed on Render or Heroku if needed.
+
+## Repositories
+
+- **Backend Repository**: [GitHub - bloagapp-backend](https://github.com/IMANARIYO/bloagapp-backend.git)
+- **Frontend Repository**: [GitHub - blogapp](https://github.com/IMANARIYO/blogapp.git)
+
+## Contributing
+
+Contributions are welcome! To contribute, please fork the repository, make your changes, and submit a pull request. Your contributions help improve the application.
+
+

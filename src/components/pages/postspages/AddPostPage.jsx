@@ -1,4 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { apiMultipartPromise } from "../../../services/api";
+import { POST_CATEGORIES, getAllPosts } from "../../../services/postService";
+
 import {
   Box,
   Button,
@@ -9,9 +13,6 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { apiMultipartPromise } from '../../../services/api'
-import { POST_CATEGORIES, getAllPosts } from '../../../services/postService'
 
 const AddPostPage = ({ onClose }) => {
   const [title, setTitle] = useState('')

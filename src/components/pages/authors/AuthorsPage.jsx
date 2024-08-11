@@ -1,7 +1,7 @@
-import AuthorCard from './UserCard'
-import React, { useEffect, useState } from 'react'
-import { default_users } from '../../../services/constants/users'
-import { getAllUsers } from '../../../services/userService'
+import AuthorCard from "./UserCard";
+import React, { useEffect, useState } from "react";
+import { default_users } from "../../../services/constants/users";
+import { getAllUsers } from "../../../services/userService";
 
 const AuthorsPage = () => {
   const [authors, setAuthors] = useState(default_users)
@@ -12,9 +12,9 @@ const AuthorsPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await getAllUsers()
-        const users = response.data // Adjust based on your API response structure
+        const users = response.data
 
-        // Setting authors with complete user data
+    
         if (users && users.length > 0) {
           setAuthors(users)
         }

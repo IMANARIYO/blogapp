@@ -1,225 +1,102 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-import {
-  Comment,
-  ExpandLess,
-  ExpandMore,
-  Home,
-  Logout,
-  Menu as MenuIcon,
-  PostAdd,
-  Settings,
-} from "@mui/icons-material";
-import {
-  Avatar,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-
 const UserDashboardLayout = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(true);
-  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSidebarToggle = () => {
-    setOpen(!open);
-  };
-
-  const handleSettingsToggle = () => {
-    setSettingsOpen(!settingsOpen);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        flexDirection: isMobile ? "column" : "row",
-      }}
-    >
-      {/* Sidebar */}
-      <div
-        style={{
-          width: open ? 250 : 60,
-          backgroundColor: "#f4f4f4",
-          padding: 20,
-          transition: "width 0.3s",
-          position: "relative",
-          overflow: "auto",
-        }}
+    <div className="flex min-h-screen">
+      {/* Toggle Button for Small Screens */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden p-4 bg-gray-800 text-white fixed top-0 left-0 z-20 rounded-full shadow-lg hover:bg-gray-700 transition-colors duration-300"
+        aria-label={isSidebarOpen ? "Close Menu" : "Open Menu"}
       >
-        <Avatar
-          src="/path/to/profile.jpg"
-          alt="Profile"
-          style={{
-            width: 60,
-            height: 60,
-            marginBottom: 20,
-            cursor: "pointer",
-          }}
-          onClick={handleProfileMenuOpen}
-        />
-        <Typography
-          variant="h6"
-          style={{
-            textAlign: "center",
-            marginBottom: 20,
-            display: open ? "block" : "none",
-          }}
-        >
-          User
-        </Typography>
-        <nav>
-          <List>
-            <ListItem
-              button
-              component={Link}
-              to="/dashboard"
-              selected={isActive("/dashboard")}
-            >
-              <ListItemIcon>
-                <Home />
-              </ListItemIcon>
-              <ListItemText
-                primary="Home"
-                style={{ display: open ? "block" : "none" }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/dashboard/posts"
-              selected={isActive("/dashboard/posts")}
-            >
-              <ListItemIcon>
-                <PostAdd />
-              </ListItemIcon>
-              <ListItemText
-                primary="Manage Posts"
-                style={{ display: open ? "block" : "none" }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/dashboard/comments"
-              selected={isActive("/dashboard/comments")}
-            >
-              <ListItemIcon>
-                <Comment />
-              </ListItemIcon>
-              <ListItemText
-                primary="Manage Comments"
-                style={{ display: open ? "block" : "none" }}
-              />
-            </ListItem>
-            <ListItem button onClick={handleSettingsToggle}>
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText
-                primary="Settings"
-                style={{ display: open ? "block" : "none" }}
-              />
-              {settingsOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            {settingsOpen && (
-              <div style={{ paddingLeft: 20 }}>
-                <ListItem
-                  button
-                  component={Link}
-                  to="/dashboard/settings/general"
-                  selected={isActive("/dashboard/settings/general")}
-                >
-                  <ListItemText primary="General Settings" />
-                </ListItem>
-                <ListItem
-                  button
-                  component={Link}
-                  to="/dashboard/settings/security"
-                  selected={isActive("/dashboard/settings/security")}
-                >
-                  <ListItemText primary="Security Settings" />
-                </ListItem>
-              </div>
-            )}
-          </List>
-        </nav>
-      </div>
+        {isSidebarOpen ? "Close Menu" : "Open Menu"}
+      </button>
 
-      {/* Main Content */}
-      <div
-        style={{
-          flex: 1,
-          padding: 20,
-          display: "flex",
-          flexDirection: "column",
-        }}
+      {/* Left Navigation */}
+      <nav
+  className={`bg-gray-800 text-white flex flex-col p-6 h-full z-10 transform ${
+    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+  } md:translate-x-0 md:static w-64 transition-transform duration-300 ease-in-out`}
+  aria-expanded={isSidebarOpen}
+  aria-label="Sidebar Navigation"
+>
+  <ul className="space-y-4 mt-16 md:mt-0">
+    <li>
+      <Link
+        to="/dashboard/summary"
+        className={`block text-lg px-4 py-3 rounded-lg transition-colors duration-300 ${
+          isActive('/dashboard/summary') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+        }`}
+        onClick={toggleSidebar}
       >
-        <Paper
-          style={{
-            padding: 20,
-            marginBottom: 20,
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          {isMobile && (
-            <IconButton onClick={handleSidebarToggle} style={{ marginRight: 20 }}>
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h4" gutterBottom>
-            User Dashboard
-          </Typography>
-        </Paper>
+        Summary
+      </Link>
+    </li>
+    <li>
+      <Link
+        to="/dashboard/profile"
+        className={`block text-lg px-4 py-3 rounded-lg transition-colors duration-300 ${
+          isActive('/dashboard/profile') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+        }`}
+        onClick={toggleSidebar}
+      >
+        Profile
+      </Link>
+    </li>
+    <li>
+      <Link
+        to="/dashboard/posts"
+        className={`block text-lg px-4 py-3 rounded-lg transition-colors duration-300 ${
+          isActive('/dashboard/posts') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+        }`}
+        onClick={toggleSidebar}
+      >
+        Manage Posts
+      </Link>
+    </li>
+    <li>
+      <Link
+        to="/dashboard/comments"
+        className={`block text-lg px-4 py-3 rounded-lg transition-colors duration-300 ${
+          isActive('/dashboard/comments') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+        }`}
+        onClick={toggleSidebar}
+      >
+        Manage Comments
+      </Link>
+    </li>
+    <li>
+      <Link
+        to="/dashboard/logout"
+        className={`block text-lg px-4 py-3 rounded-lg transition-colors duration-300 ${
+          isActive('/dashboard/logout') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+        }`}
+        onClick={toggleSidebar}
+      >
+        Logout
+      </Link>
+    </li>
+  </ul>
+</nav>
+
+      {/* Main Section */}
+      <main
+        className={`flex-grow p-6 bg-gray-100 transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "" : "ml-0"
+        }`}
+      >
         <Outlet />
-      </div>
-
-      {/* Profile Menu */}
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleProfileMenuClose}>
-        <MenuItem onClick={handleProfileMenuClose} component={Link} to="/dashboard/profile">
-          <Avatar src="/path/to/profile.jpg" style={{ width: 40, height: 40, marginRight: 10 }} />
-          Profile
-        </MenuItem>
-        <MenuItem onClick={handleProfileMenuClose} component={Link} to="/dashboard/profile/edit">
-          <Settings style={{ marginRight: 10 }} />
-          Edit Profile
-        </MenuItem>
-        <MenuItem onClick={handleProfileMenuClose} component={Link} to="/dashboard/profile/change-password">
-          <Settings style={{ marginRight: 10 }} />
-          Change Password
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleProfileMenuClose}>
-          <Logout style={{ marginRight: 10 }} />
-          Logout
-        </MenuItem>
-      </Menu>
+      </main>
     </div>
   );
 };
